@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>OceanBite | Campus Virtual Kitchen</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/6/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <style>
+    body, h1, h2, h3, h4, h5, h6 { font-family: "Raleway", sans-serif; }
+    
+    /* Ocean Theme Color Palette */
+    :root {
+      --ocean-deep: #0f4c81;
+      --ocean-mid: #0077b6;
+      --ocean-light: #90e0ef;
+      --ocean-bg: #f4f9f9;
+      --sand-gold: #f4a261;
+    }
+
+    body { background-color: var(--ocean-bg); }
+
+    /* Custom Header Wave Background */
+    .ocean-header {
+      background: linear-gradient(135deg, var(--ocean-deep), var(--ocean-mid));
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .ocean-badge {
+      background-color: var(--sand-gold);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.85em;
+      font-weight: bold;
+    }
+
+    /* Food Card Hover Animations */
+    .food-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 8px;
+      overflow: hidden;
+      background: white;
+    }
+    .food-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(15, 76, 129, 0.2);
+    }
+
+    .food-img {
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+      height: 200px;
+      object-fit: cover;
+      width: 100%;
+    }
+    .food-img:hover { opacity: 0.85; }
+
+    /* Modal Image Lightbox */
+    .modal-img {
+      margin: auto;
+      display: block;
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body class="w3-content" style="max-width:1600px">
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px; border-right: 2px solid #e0f7fa;" id="mySidebar">
+  <div class="w3-container w3-padding-16" style="background-color: var(--ocean-deep); color: white;">
+    <button onclick="w3_close()" class="w3-button w3-hide-large w3-right w3-jumbo" title="Close menu">×</button>
+    <h3><i class="fa fa-cutlery w3-margin-right"></i><b>OceanBite</b></h3>
+    <p class="w3-text-light-grey">Virtual Kitchen for Campus</p>
+  </div>
+  <div class="w3-bar-block w3-padding-16">
+    <a href="#menu" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>FOOD MENU</a>
+    <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-info-circle fa-fw w3-margin-right"></i>ABOUT OUR CONCEPT</a>
+    <a href="#order" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-shopping-cart fa-fw w3-margin-right"></i>QUICK ORDER</a>
+  </div>
+  
+  <div class="w3-panel w3-padding-16">
+    <div class="w3-card w3-light-blue w3-padding w3-round">
+      <h5><i class="fa fa-bolt"></i> Student Perks</h5>
+      <p class="w3-small">Free dorm delivery on orders over $15! Speed delivery guaranteed before midnight.</p>
+    </div>
+  </div>
+
+  <div class="w3-panel w3-large w3-text-teal">
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-twitter w3-hover-opacity"></i>
+  </div>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="Close side menu" id="myOverlay"></div>
+
+<!-- Page content -->
+<main class="w3-main" style="margin-left:300px">
+
+  <!-- Header -->
+  <header id="menu" class="ocean-header w3-container w3-padding-24">
+    <button class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></button>
+    <div class="w3-container">
+      <h1><b>OceanBite Virtual Kitchen</b></h1>
+      <p class="w3-large">Fresh, Fast & Affordable Campus Food Delivery</p>
+      
+      <!-- Filter Section (Retained as required) -->
+      <div class="w3-section w3-padding-16" style="border-top: 1px solid rgba(255,255,255,0.2);">
+        <span class="w3-margin-right"><b>Filter:</b></span>
+        <button class="w3-button w3-black filter-btn" onclick="filterFood('all')">ALL</button>
+        <button class="w3-button w3-white filter-btn" onclick="filterFood('main')"><i class="fa fa-cutlery w3-margin-right"></i>Main Dishes</button>
+        <button class="w3-button w3-white filter-btn" onclick="filterFood('snack')"><i class="fa fa-bolt w3-margin-right"></i>Quick Bites</button>
+        <button class="w3-button w3-white filter-btn" onclick="filterFood('drink')"><i class="fa fa-coffee w3-margin-right"></i>Drinks & Desserts</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Food Grid Container (Max 6 posts per page) -->
+  <div class="w3-container w3-padding-32">
+    <div id="foodGrid" class="w3-grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px">
+      
+      <!-- Item 1 -->
+      <article class="food-card food-item main">
+        <img src="images/food1.jpg" alt="Deep Sea Ocean Bowl" class="food-img" onclick="openLightbox(this.src, 'Deep Sea Ocean Bowl')">
+        <div class="w3-container w3-padding">
+          <span class="ocean-badge w3-right">$9.99</span>
+          <h4><b>Deep Sea Ocean Bowl</b></h4>
+          <p class="w3-text-grey w3-small">Fresh salmon poke bowl served over seasoned brown rice, edamame, seaweed salad, and signature sesame sauce.</p>
+        </div>
+      </article>
+
+      <!-- Item 2 -->
+      <article class="food-card food-item main">
+        <img src="images/food2.jpg" alt="Atlantic Crispy Fish Burger" class="food-img" onclick="openLightbox(this.src, 'Atlantic Crispy Fish Burger')">
+        <div class="w3-container w3-padding">
+          <span class="ocean-badge w3-right">$7.49</span>
+          <h4><b>Atlantic Crispy Fish Burger</b></h4>
+          <p class="w3-text-grey w3-small">Golden fried cod fillet topped with tangy tartar sauce, fresh lettuce, and toasted brioche buns.</p>
+        </div>
+      </article>
+
+      <!-- Item 3 -->
+      <article class="food-card food-item snack">
+        <img src="images/food3.jpg" alt="Tidal Wave Garlic Fries" class="food-img" onclick="openLightbox(this.src, 'Tidal Wave Garlic Fries')">
+        <div class="w3-container w3-padding">
+          <span class="ocean-badge w3-right">$4.29</span>
+          <h4><b>Tidal Wave Garlic Fries</b></h4>
+          <p class="w3-text-grey w3-small">Crispy thick-cut fries tossed with roasted garlic butter, parsley, and sea salt. Perfect for late-night study sessions!</p>
+        </div>
+      </article>
+
+      <!-- Item 4 -->
+      <article class="food-card food-item main">
+        <img src="images/food4.jpg" alt="Sailor Grilled Chicken Rice" class="food-img" onclick="openLightbox(this.src, 'Sailor Grilled Chicken Rice')">
+        <div class="w3-container w3-padding">
+          <span class="ocean-badge w3-right">$8.99</span>
+          <h4><b>Sailor Grilled Chicken Rice</b></h4>
+          <p class="w3-text-grey w3-small">Herb-marinated grilled chicken breast served with steamed veggies and fragrant jasmine rice.</p>
+        </div>
+      </article>
+
+      <!-- Item 5 -->
+      <article class="food-card food-item drink">
+        <img src="images/food5.jpg" alt="Blue Lagoon Sparkler" class="food-img" onclick="openLightbox(this.src, 'Blue Lagoon Sparkler')">
+        <div class="w3-container w3-padding">
+          <span class="ocean-badge w3-right">$3.50</span>
+          <h4><b>Blue Lagoon Sparkler</b></h4>
+          <p class="w3-text-grey w3-small">Refreshing blue curacao citrus soda with sparkling water, lemon mint slices, and crushed ice.</p>
+        </div>
+      </article>
+
+      <!-- Item 6 -->
+      <article class="food-card food-item main">
+        <img src="images/food6.jpg" alt="Coral Reef Seafood Pasta" class="food-img" onclick="openLightbox(this.src, 'Coral Reef Seafood Pasta')">
+        <div class="w3-container w3-padding">
+          <span class="ocean-badge w3-right">$11.49</span>
+          <h4><b>Coral Reef Seafood Pasta</b></h4>
+          <p class="w3-text-grey w3-small">Rich garlic cream pasta with juicy shrimp, mussels, and squid sprinkled with parmesan cheese.</p>
+        </div>
+      </article>
+
+      <!-- Item 7 -->
+      <article class="food-card food-item snack">
+        <img src="images/food7.jpg" alt="Captains Chicken Wings" class="food-img" onclick="openLightbox(this.src, 'Captains Chicken Wings')">
+        <div class="w3-container w3-padding">
+          <span class="ocean-badge w3-right">$6.99</span>
+          <h4><b>Captain's Chicken Wings</b></h4>
+          <p class="w3-text-grey w3-small">Six pieces of crispy fried wings glazed with spicy honey BBQ sauce. Served with ranch dip.</p>
+        </div>
+      </article>
+
+      <!-- Item 8 -->
+      <article class="food-card food-item drink">
+        <img src="images/food8.jpg" alt="Ocean Mist Iced Match Latte" class="food-img" onclick="openLightbox(this.src, 'Ocean Mist Iced Matcha Latte')">
+        <div class="w3-container w3-padding">
+          <span class="ocean-badge w3-right">$4.99</span>
+          <h4><b>Ocean Mist Matcha Latte</b></h4>
+          <p class="w3-text-grey w3-small">Premium Japanese matcha layered with fresh oat milk and sea-salt cream foam topping.</p>
+        </div>
+      </article>
+
+      <!-- Item 9 -->
+      <article class="food-card food-item main">
+        <img src="images/food9.jpg" alt="Island Veggie Wrap" class="food-img" onclick="openLightbox(this.src, 'Island Veggie Wrap')">
+        <div class="w3-container w3-padding">
+          <span class="ocean-badge w3-right">$6.49</span>
+          <h4><b>Island Veggie Wrap</b></h4>
+          <p class="w3-text-grey w3-small">Whole wheat tortilla stuffed with avocado, hummus, cucumber, spinach, and sweet peppers.</p>
+        </div>
+      </article>
+
+      <!-- Item 10 -->
+      <article class="food-card food-item drink">
+        <img src="images/food10.jpg" alt="Sea Salt Chocolate Mousse" class="food-img" onclick="openLightbox(this.src, 'Sea Salt Chocolate Mousse')">
+        <div class="w3-container w3-padding">
+          <span class="ocean-badge w3-right">$3.99</span>
+          <h4><b>Sea Salt Chocolate Mousse</b></h4>
+          <p class="w3-text-grey w3-small">Velvety dark chocolate mousse infused with flaky sea salt and topped with whipped cream.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <!-- Pagination (6 Items Max Per Page Requirement) -->
+  <div class="w3-center w3-padding-16">
+    <div class="w3-bar">
+      <button class="w3-bar-item w3-button w3-hover-teal" onclick="changePage(-1)">«</button>
+      <button class="w3-bar-item w3-button page-num w3-teal" onclick="goToPage(1)">1</button>
+      <button class="w3-bar-item w3-button page-num w3-hover-teal" onclick="goToPage(2)">2</button>
+      <button class="w3-bar-item w3-button w3-hover-teal" onclick="changePage(1)">»</button>
+    </div>
+  </div>
+
+  <!-- Lightbox Modal for Image Enlargement -->
+  <div id="imageModal" class="w3-modal" onclick="this.style.display='none'">
+    <span class="w3-button w3-hover-red w3-xlarge w3-display-topright">&times;</span>
+    <div class="w3-modal-content w3-animate-zoom w3-background-transparent w3-center w3-padding-32">
+      <img id="modalImg" class="modal-img" src="">
+      <p id="modalCaption" class="w3-text-white w3-xlarge w3-margin-top"></p>
+    </div>
+  </div>
+
+  <hr style="border-top: 2px solid #e0f7fa;">
+
+  <!-- About Concept Section -->
+  <section class="w3-container w3-padding-32" id="about">
+    <h2><b>About OceanBite</b></h2>
+    <p class="w3-large w3-text-dark-grey">100% Virtual Kitchen Built Exclusively for College Students.</p>
+    <div class="w3-row-padding w3-margin-top">
+      <div class="w3-third w3-margin-bottom">
+        <div class="w3-card w3-padding w3-center w3-white">
+          <i class="fa fa-fighter-jet w3-jumbo w3-text-teal"></i>
+          <h4><b>Fast Campus Delivery</b></h4>
+          <p>Delivered straight to your dorm entrance or campus gate in under 30 minutes.</p>
+        </div>
+      </div>
+      <div class="w3-third w3-margin-bottom">
+        <div class="w3-card w3-padding w3-center w3-white">
+          <i class="fa fa-dollar w3-jumbo w3-text-teal"></i>
+          <h4><b>Student Friendly Prices</b></h4>
+          <p>Budget-conscious meal options starting from $3.50 with zero hidden platform fees.</p>
+        </div>
+      </div>
+      <div class="w3-third w3-margin-bottom">
+        <div class="w3-card w3-padding w3-center w3-white">
+          <i class="fa fa-moon-o w3-jumbo w3-text-teal"></i>
+          <h4><b>Late Night Hours</b></h4>
+          <p>Open daily from 11:00 AM until 01:00 AM to keep your late-night study sessions fueled.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Quick Order Form -->
+  <section class="w3-container w3-padding-32 w3-light-blue" id="order">
+    <h2><b>Place Your Order</b></h2>
+    <p>Select your favorite meal and we will bring it to your campus dorm!</p>
+
+    <form class="w3-container w3-white w3-card w3-padding-24 w3-round" onsubmit="handleOrder(event)">
+      <div class="w3-section">
+        <label><b>Student Name</b></label>
+        <input class="w3-input w3-border" type="text" placeholder="e.g., Alex Chen" required>
+      </div>
+      <div class="w3-section">
+        <label><b>Dorm Building / Room Number</b></label>
+        <input class="w3-input w3-border" type="text" placeholder="e.g., Wuling Dorm Complex #402" required>
+      </div>
+      <div class="w3-section">
+        <label><b>Select Item</b></label>
+        <select class="w3-select w3-border" required>
+          <option value="" disabled selected>Choose a food item</option>
+          <option value="1">Deep Sea Ocean Bowl ($9.99)</option>
+          <option value="2">Atlantic Crispy Fish Burger ($7.49)</option>
+          <option value="3">Tidal Wave Garlic Fries ($4.29)</option>
+          <option value="4">Sailor Grilled Chicken Rice ($8.99)</option>
+          <option value="5">Blue Lagoon Sparkler ($3.50)</option>
+          <option value="6">Coral Reef Seafood Pasta ($11.49)</option>
+          <option value="7">Captain's Chicken Wings ($6.99)</option>
+          <option value="8">Ocean Mist Matcha Latte ($4.99)</option>
+          <option value="9">Island Veggie Wrap ($6.49)</option>
+          <option value="10">Sea Salt Chocolate Mousse ($3.99)</option>
+        </select>
+      </div>
+      <div class="w3-section">
+        <label><b>Special Instructions</b></label>
+        <input class="w3-input w3-border" type="text" placeholder="e.g., Extra spicy, leave at front desk">
+      </div>
+      <button type="submit" class="w3-button w3-teal w3-block w3-padding-large w3-margin-top">
+        <i class="fa fa-paper-plane w3-margin-right"></i> Submit Order
+      </button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer class="w3-grid w3-padding-32 w3-dark-grey" style="grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:32px">
+    <div class="w3-container">
+      <h3><b>OceanBite</b></h3>
+      <p>Your premier virtual kitchen delivering delicious meals directly to college students.</p>
+    </div>
+
+    <div class="w3-container">
+      <h3><b>POPULAR ITEMS</b></h3>
+      <ul class="w3-ul w3-hoverable w3-text-light-grey">
+        <li class="w3-padding-16">Deep Sea Ocean Bowl</li>
+        <li class="w3-padding-16">Tidal Wave Garlic Fries</li>
+      </ul>
+    </div>
+
+    <div class="w3-container">
+      <h3><b>CATEGORIES</b></h3>
+      <p>
+        <span class="w3-tag w3-teal w3-margin-bottom">Bowls</span>
+        <span class="w3-tag w3-grey w3-small w3-margin-bottom">Burgers</span>
+        <span class="w3-tag w3-grey w3-small w3-margin-bottom">Drinks</span>
+        <span class="w3-tag w3-grey w3-small w3-margin-bottom">Fries</span>
+        <span class="w3-tag w3-grey w3-small w3-margin-bottom">Late Night</span>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Mandatory Footer Requirement: Powered by w3.css -->
+  <div class="w3-black w3-center w3-padding-24">
+    Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-opacity">w3.css</a>
+  </div>
+
+</main>
+
+<script>
+// Sidebar Toggle Logic
+const sidebar = document.getElementById("mySidebar");
+const overlay = document.getElementById("myOverlay");
+
+function w3_open() {
+  sidebar.style.display = "block";
+  overlay.style.display = "block";
+}
+
+function w3_close() {
+  sidebar.style.display = "none";
+  overlay.style.display = "none";
+}
+
+// Lightbox Modal Logic for Image Enlargement
+function openLightbox(src, alt) {
+  document.getElementById("modalImg").src = src;
+  document.getElementById("modalCaption").innerText = alt;
+  document.getElementById("imageModal").style.display = "block";
+}
+
+// Pagination Logic (Limit 6 items per page)
+let currentPage = 1;
+const itemsPerPage = 6;
+const foodItems = Array.from(document.querySelectorAll('.food-item'));
+
+function renderPagination() {
+  const visibleItems = foodItems.filter(item => item.dataset.filtered !== 'false');
+  const totalPages = Math.ceil(visibleItems.length / itemsPerPage);
+
+  visibleItems.forEach((item, index) => {
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+    if (index >= startIdx && index < endIdx) {
+      item.style.display = "block";
+    } else {
+      item.style.display = "none";
+    }
+  });
+
+  // Update button active styles
+  document.querySelectorAll('.page-num').forEach((btn, idx) => {
+    if (idx + 1 === currentPage) {
+      btn.classList.add('w3-teal');
+      btn.classList.remove('w3-white');
+    } else {
+      btn.classList.remove('w3-teal');
+      btn.classList.add('w3-white');
+    }
+  });
+}
+
+function changePage(direction) {
+  const totalPages = Math.ceil(foodItems.filter(item => item.dataset.filtered !== 'false').length / itemsPerPage);
+  currentPage += direction;
+  if (currentPage < 1) currentPage = 1;
+  if (currentPage > totalPages) currentPage = totalPages;
+  renderPagination();
+}
+
+function goToPage(pageNum) {
+  currentPage = pageNum;
+  renderPagination();
+}
+
+// Filtering Logic
+function filterFood(category) {
+  foodItems.forEach(item => {
+    if (category === 'all' || item.classList.contains(category)) {
+      item.dataset.filtered = 'true';
+    } else {
+      item.dataset.filtered = 'false';
+    }
+  });
+  currentPage = 1;
+  renderPagination();
+}
+
+// Initial Render
+renderPagination();
+
+// Interactive Form Handler
+function handleOrder(e) {
+  e.preventDefault();
+  alert("Thank you for your order! OceanBite is preparing your food.");
+}
+</script>
+
+</body>
+</html>
