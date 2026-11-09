@@ -16,15 +16,41 @@
       --ocean-deep: #0f4c81;
       --ocean-mid: #0077b6;
       --ocean-light: #90e0ef;
-      --ocean-bg: #f4f9f9;
+      --ocean-bg: #eaf7f6;
       --sand-gold: #f4a261;
     }
 
-    body { background-color: var(--ocean-bg); }
+    body {
+      background-color: var(--ocean-bg);
+      background-image: linear-gradient(180deg, #b9e8f2 0%, #e7f5ef 34%, #f8e6c7 100%);
+      background-attachment: fixed;
+    }
+    .w3-main { transition: margin-left 0.3s ease; }
+    .order-section {
+      background: linear-gradient(135deg, #5d9fb3 0%, #9acbd1 100%);
+    }
+    #mySidebar.menu-hidden { display: none !important; }
+    @media (min-width: 993px) {
+      .w3-main.menu-collapsed { margin-left: 0 !important; }
+    }
 
-    /* Custom Header Wave Background */
+    /* Desktop keeps the menu on the left; mobile starts with it closed. */
+    @media (max-width: 992px) {
+      #mySidebar { display: none; }
+      .w3-main { margin-left: 0 !important; }
+    }
+    @media (min-width: 993px) {
+      #mySidebar { display: block; }
+    }
+
+    /* Sunset beach hero background */
     .ocean-header {
-      background: linear-gradient(135deg, var(--ocean-deep), var(--ocean-mid));
+      background-image:
+        linear-gradient(180deg, rgba(18, 35, 58, 0.16), rgba(18, 35, 58, 0.26)),
+        url("https://images.unsplash.com/photo-1768622180477-5043d6dcdfcc?auto=format&fit=crop&fm=jpg&q=80&w=2000");
+      background-size: cover;
+      background-position: center 72%;
+      background-repeat: no-repeat;
       color: white;
       position: relative;
       overflow: hidden;
@@ -41,14 +67,74 @@
 
     /* Food Card Hover Animations */
     .food-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       border-radius: 8px;
       overflow: hidden;
       background: white;
     }
+    .food-card .food-img { flex: 0 0 200px; }
+    .food-card > .w3-container {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      align-items: stretch;
+      text-align: left;
+    }
+    .food-card .ocean-badge {
+      align-self: flex-end;
+      float: none;
+      padding: 3px 8px;
+      font-size: 0.72rem;
+      line-height: 1.2;
+    }
+    .food-card h4 {
+      min-height: 2.8em;
+      margin: 0.35em 0 0.1em;
+      line-height: 1.4;
+    }
+    .food-card p {
+      flex: 1;
+      margin-top: 0.1em;
+      line-height: 1.55;
+    }
     .food-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 20px rgba(15, 76, 129, 0.2);
+    }
+    .food-card .food-img {
+      transition: transform 0.45s ease, opacity 0.3s ease;
+    }
+    .food-card:hover .food-img { transform: scale(1.045); }
+    .filter-btn {
+      border-radius: 999px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+    }
+    .filter-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(15, 76, 129, 0.2);
+    }
+    .filter-btn:active { transform: scale(0.94); }
+    .filter-btn[aria-pressed="true"] {
+      background-color: var(--ocean-deep) !important;
+      color: #fff !important;
+      box-shadow: 0 4px 12px rgba(15, 76, 129, 0.25);
+    }
+    .filter-btn.filter-clicked { animation: filter-tap 0.38s ease; }
+    @keyframes filter-tap {
+      0% { transform: scale(1); }
+      45% { transform: scale(0.92); }
+      100% { transform: scale(1); }
+    }
+    .food-card-enter { animation: food-enter 0.38s ease both; }
+    @keyframes food-enter {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .filter-btn, .food-card-enter { animation: none !important; transition: none !important; }
     }
 
     .food-img {
@@ -60,14 +146,6 @@
     }
     .food-img:hover { opacity: 0.85; }
 
-    /* Modal Image Lightbox */
-    .modal-img {
-      margin: auto;
-      display: block;
-      max-width: 90%;
-      max-height: 80vh;
-      border-radius: 8px;
-    }
   </style>
 </head>
 
@@ -76,7 +154,7 @@
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px; border-right: 2px solid #e0f7fa;" id="mySidebar">
   <div class="w3-container w3-padding-16" style="background-color: var(--ocean-deep); color: white;">
-    <button onclick="w3_close()" class="w3-button w3-hide-large w3-right w3-jumbo" title="Close menu">×</button>
+    <button onclick="w3_close()" class="w3-button w3-hide-large w3-right w3-jumbo" title="Close menu" aria-label="Close navigation menu">×</button>
     <h3><i class="fa fa-cutlery w3-margin-right"></i><b>OceanBite</b></h3>
     <p class="w3-text-light-grey">Virtual Kitchen for Campus</p>
   </div>
@@ -108,7 +186,7 @@
 
   <!-- Header -->
   <header id="menu" class="ocean-header w3-container w3-padding-24">
-    <button class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></button>
+    <button id="menuToggle" class="w3-button w3-xxlarge w3-hover-text-grey" onclick="toggleMenu()" aria-label="Toggle navigation menu" aria-controls="mySidebar" aria-expanded="false"><i class="fa fa-bars" aria-hidden="true"></i></button>
     <div class="w3-container">
       <h1><b>OceanBite Virtual Kitchen</b></h1>
       <p class="w3-large">Fresh, Fast & Affordable Campus Food Delivery</p>
@@ -116,10 +194,10 @@
       <!-- Filter Section (Retained as required) -->
       <div class="w3-section w3-padding-16" style="border-top: 1px solid rgba(255,255,255,0.2);">
         <span class="w3-margin-right"><b>Filter:</b></span>
-        <button class="w3-button w3-black filter-btn" onclick="filterFood('all')">ALL</button>
-        <button class="w3-button w3-white filter-btn" onclick="filterFood('main')"><i class="fa fa-cutlery w3-margin-right"></i>Main Dishes</button>
-        <button class="w3-button w3-white filter-btn" onclick="filterFood('snack')"><i class="fa fa-bolt w3-margin-right"></i>Quick Bites</button>
-        <button class="w3-button w3-white filter-btn" onclick="filterFood('drink')"><i class="fa fa-coffee w3-margin-right"></i>Drinks & Desserts</button>
+        <button type="button" class="w3-button w3-black filter-btn" data-category="all" aria-pressed="true">ALL</button>
+        <button type="button" class="w3-button w3-white filter-btn" data-category="main" aria-pressed="false"><i class="fa fa-cutlery w3-margin-right"></i>Main Dishes</button>
+        <button type="button" class="w3-button w3-white filter-btn" data-category="snack" aria-pressed="false"><i class="fa fa-bolt w3-margin-right"></i>Quick Bites</button>
+        <button type="button" class="w3-button w3-white filter-btn" data-category="drink" aria-pressed="false"><i class="fa fa-coffee w3-margin-right"></i>Drinks & Desserts</button>
       </div>
     </div>
   </header>
@@ -129,8 +207,7 @@
     <div id="foodGrid" class="w3-grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px">
       
       <!-- Item 1 -->
-      <article class="food-card food-item main">
-        <img src="images/food1.jpg" alt="Deep Sea Ocean Bowl" class="food-img" onclick="openLightbox(this.src, 'Deep Sea Ocean Bowl')">
+      <article class="food-card food-item main" data-category="main">
         <div class="w3-container w3-padding">
           <span class="ocean-badge w3-right">$9.99</span>
           <h4><b>Deep Sea Ocean Bowl</b></h4>
@@ -139,8 +216,7 @@
       </article>
 
       <!-- Item 2 -->
-      <article class="food-card food-item main">
-        <img src="images/food2.jpg" alt="Atlantic Crispy Fish Burger" class="food-img" onclick="openLightbox(this.src, 'Atlantic Crispy Fish Burger')">
+      <article class="food-card food-item main" data-category="main">
         <div class="w3-container w3-padding">
           <span class="ocean-badge w3-right">$7.49</span>
           <h4><b>Atlantic Crispy Fish Burger</b></h4>
@@ -149,8 +225,7 @@
       </article>
 
       <!-- Item 3 -->
-      <article class="food-card food-item snack">
-        <img src="images/food3.jpg" alt="Tidal Wave Garlic Fries" class="food-img" onclick="openLightbox(this.src, 'Tidal Wave Garlic Fries')">
+      <article class="food-card food-item snack" data-category="snack">
         <div class="w3-container w3-padding">
           <span class="ocean-badge w3-right">$4.29</span>
           <h4><b>Tidal Wave Garlic Fries</b></h4>
@@ -159,8 +234,7 @@
       </article>
 
       <!-- Item 4 -->
-      <article class="food-card food-item main">
-        <img src="images/food4.jpg" alt="Sailor Grilled Chicken Rice" class="food-img" onclick="openLightbox(this.src, 'Sailor Grilled Chicken Rice')">
+      <article class="food-card food-item main" data-category="main">
         <div class="w3-container w3-padding">
           <span class="ocean-badge w3-right">$8.99</span>
           <h4><b>Sailor Grilled Chicken Rice</b></h4>
@@ -169,8 +243,7 @@
       </article>
 
       <!-- Item 5 -->
-      <article class="food-card food-item drink">
-        <img src="images/food5.jpg" alt="Blue Lagoon Sparkler" class="food-img" onclick="openLightbox(this.src, 'Blue Lagoon Sparkler')">
+      <article class="food-card food-item drink" data-category="drink">
         <div class="w3-container w3-padding">
           <span class="ocean-badge w3-right">$3.50</span>
           <h4><b>Blue Lagoon Sparkler</b></h4>
@@ -179,8 +252,7 @@
       </article>
 
       <!-- Item 6 -->
-      <article class="food-card food-item main">
-        <img src="images/food6.jpg" alt="Coral Reef Seafood Pasta" class="food-img" onclick="openLightbox(this.src, 'Coral Reef Seafood Pasta')">
+      <article class="food-card food-item main" data-category="main">
         <div class="w3-container w3-padding">
           <span class="ocean-badge w3-right">$11.49</span>
           <h4><b>Coral Reef Seafood Pasta</b></h4>
@@ -189,8 +261,7 @@
       </article>
 
       <!-- Item 7 -->
-      <article class="food-card food-item snack">
-        <img src="images/food7.jpg" alt="Captains Chicken Wings" class="food-img" onclick="openLightbox(this.src, 'Captains Chicken Wings')">
+      <article class="food-card food-item snack" data-category="snack">
         <div class="w3-container w3-padding">
           <span class="ocean-badge w3-right">$6.99</span>
           <h4><b>Captain's Chicken Wings</b></h4>
@@ -199,8 +270,7 @@
       </article>
 
       <!-- Item 8 -->
-      <article class="food-card food-item drink">
-        <img src="images/food8.jpg" alt="Ocean Mist Iced Match Latte" class="food-img" onclick="openLightbox(this.src, 'Ocean Mist Iced Matcha Latte')">
+      <article class="food-card food-item drink" data-category="drink">
         <div class="w3-container w3-padding">
           <span class="ocean-badge w3-right">$4.99</span>
           <h4><b>Ocean Mist Matcha Latte</b></h4>
@@ -209,8 +279,7 @@
       </article>
 
       <!-- Item 9 -->
-      <article class="food-card food-item main">
-        <img src="images/food9.jpg" alt="Island Veggie Wrap" class="food-img" onclick="openLightbox(this.src, 'Island Veggie Wrap')">
+      <article class="food-card food-item main" data-category="main">
         <div class="w3-container w3-padding">
           <span class="ocean-badge w3-right">$6.49</span>
           <h4><b>Island Veggie Wrap</b></h4>
@@ -219,8 +288,7 @@
       </article>
 
       <!-- Item 10 -->
-      <article class="food-card food-item drink">
-        <img src="images/food10.jpg" alt="Sea Salt Chocolate Mousse" class="food-img" onclick="openLightbox(this.src, 'Sea Salt Chocolate Mousse')">
+      <article class="food-card food-item drink" data-category="drink">
         <div class="w3-container w3-padding">
           <span class="ocean-badge w3-right">$3.99</span>
           <h4><b>Sea Salt Chocolate Mousse</b></h4>
@@ -231,24 +299,10 @@
     </div>
   </div>
 
-  <!-- Pagination (6 Items Max Per Page Requirement) -->
-  <div class="w3-center w3-padding-16">
-    <div class="w3-bar">
-      <button class="w3-bar-item w3-button w3-hover-teal" onclick="changePage(-1)">«</button>
-      <button class="w3-bar-item w3-button page-num w3-teal" onclick="goToPage(1)">1</button>
-      <button class="w3-bar-item w3-button page-num w3-hover-teal" onclick="goToPage(2)">2</button>
-      <button class="w3-bar-item w3-button w3-hover-teal" onclick="changePage(1)">»</button>
-    </div>
-  </div>
-
-  <!-- Lightbox Modal for Image Enlargement -->
-  <div id="imageModal" class="w3-modal" onclick="this.style.display='none'">
-    <span class="w3-button w3-hover-red w3-xlarge w3-display-topright">&times;</span>
-    <div class="w3-modal-content w3-animate-zoom w3-background-transparent w3-center w3-padding-32">
-      <img id="modalImg" class="modal-img" src="">
-      <p id="modalCaption" class="w3-text-white w3-xlarge w3-margin-top"></p>
-    </div>
-  </div>
+  <!-- Pagination is generated from the currently filtered menu items. -->
+  <nav class="w3-center w3-padding-16" aria-label="Menu pages">
+    <div class="w3-bar" id="pagination"></div>
+  </nav>
 
   <hr style="border-top: 2px solid #e0f7fa;">
 
@@ -282,7 +336,7 @@
   </section>
 
   <!-- Interactive Quick Order Form -->
-  <section class="w3-container w3-padding-32 w3-light-blue" id="order">
+  <section class="w3-container w3-padding-32 order-section" id="order">
     <h2><b>Place Your Order</b></h2>
     <p>Select your favorite meal and we will bring it to your campus dorm!</p>
 
@@ -297,7 +351,7 @@
       </div>
       <div class="w3-section">
         <label><b>Select Item</b></label>
-        <select class="w3-select w3-border" required>
+          <select id="orderItem" name="orderItem" class="w3-select w3-border" required>
           <option value="" disabled selected>Choose a food item</option>
           <option value="1">Deep Sea Ocean Bowl ($9.99)</option>
           <option value="2">Atlantic Crispy Fish Burger ($7.49)</option>
@@ -359,23 +413,62 @@
 // Sidebar Toggle Logic
 const sidebar = document.getElementById("mySidebar");
 const overlay = document.getElementById("myOverlay");
+const mainContent = document.querySelector(".w3-main");
+const menuToggle = document.getElementById("menuToggle");
+let desktopMenuHidden = false;
 
 function w3_open() {
+  sidebar.classList.remove("menu-hidden");
   sidebar.style.display = "block";
-  overlay.style.display = "block";
+  if (window.matchMedia("(max-width: 992px)").matches) {
+    overlay.style.display = "block";
+  } else {
+    desktopMenuHidden = false;
+    mainContent.style.marginLeft = "300px";
+  }
+  menuToggle.setAttribute("aria-expanded", "true");
 }
 
 function w3_close() {
-  sidebar.style.display = "none";
-  overlay.style.display = "none";
+  if (window.matchMedia("(max-width: 992px)").matches) {
+    sidebar.classList.add("menu-hidden");
+    sidebar.style.display = "none";
+    overlay.style.display = "none";
+    menuToggle.setAttribute("aria-expanded", "false");
+  }
 }
 
-// Lightbox Modal Logic for Image Enlargement
-function openLightbox(src, alt) {
-  document.getElementById("modalImg").src = src;
-  document.getElementById("modalCaption").innerText = alt;
-  document.getElementById("imageModal").style.display = "block";
+function toggleMenu() {
+  if (window.matchMedia("(max-width: 992px)").matches) {
+    if (sidebar.style.display === "block") w3_close();
+    else w3_open();
+    return;
+  }
+
+  desktopMenuHidden = !desktopMenuHidden;
+  sidebar.classList.toggle("menu-hidden", desktopMenuHidden);
+  mainContent.classList.toggle("menu-collapsed", desktopMenuHidden);
+  sidebar.style.display = desktopMenuHidden ? "none" : "block";
+  mainContent.style.marginLeft = desktopMenuHidden ? "0" : "300px";
+  menuToggle.setAttribute("aria-expanded", String(!desktopMenuHidden));
 }
+
+window.addEventListener("resize", () => {
+  if (window.matchMedia("(max-width: 992px)").matches) {
+    mainContent.style.marginLeft = "0";
+    sidebar.classList.add("menu-hidden");
+    sidebar.style.display = "none";
+    overlay.style.display = "none";
+    sidebar.classList.toggle("menu-hidden", desktopMenuHidden);
+    mainContent.classList.toggle("menu-collapsed", desktopMenuHidden);
+    menuToggle.setAttribute("aria-expanded", "false");
+  } else {
+    overlay.style.display = "none";
+    sidebar.style.display = desktopMenuHidden ? "none" : "block";
+    mainContent.style.marginLeft = desktopMenuHidden ? "0" : "300px";
+    menuToggle.setAttribute("aria-expanded", String(!desktopMenuHidden));
+  }
+});
 
 // Pagination Logic (Limit 6 items per page)
 let currentPage = 1;
@@ -385,27 +478,53 @@ const foodItems = Array.from(document.querySelectorAll('.food-item'));
 function renderPagination() {
   const visibleItems = foodItems.filter(item => item.dataset.filtered !== 'false');
   const totalPages = Math.ceil(visibleItems.length / itemsPerPage);
+  currentPage = Math.min(Math.max(currentPage, 1), Math.max(totalPages, 1));
 
-  visibleItems.forEach((item, index) => {
-    const startIdx = (currentPage - 1) * itemsPerPage;
-    const endIdx = startIdx + itemsPerPage;
-    if (index >= startIdx && index < endIdx) {
-      item.style.display = "block";
-    } else {
-      item.style.display = "none";
+  const startIdx = (currentPage - 1) * itemsPerPage;
+  const pageItems = new Set(visibleItems.slice(startIdx, startIdx + itemsPerPage));
+  foodItems.forEach(item => {
+    const shouldShow = pageItems.has(item);
+    item.style.display = shouldShow ? "block" : "none";
+    item.classList.remove("food-card-enter");
+    if (shouldShow) {
+      void item.offsetWidth;
+      item.classList.add("food-card-enter");
     }
   });
 
-  // Update button active styles
-  document.querySelectorAll('.page-num').forEach((btn, idx) => {
-    if (idx + 1 === currentPage) {
-      btn.classList.add('w3-teal');
-      btn.classList.remove('w3-white');
-    } else {
-      btn.classList.remove('w3-teal');
-      btn.classList.add('w3-white');
-    }
-  });
+  // Keep the page buttons accurate after category filtering.
+  const pagination = document.getElementById('pagination');
+  pagination.replaceChildren();
+  if (totalPages <= 1) return;
+
+  const previous = document.createElement('button');
+  previous.type = 'button';
+  previous.className = 'w3-bar-item w3-button w3-hover-teal';
+  previous.textContent = '«';
+  previous.setAttribute('aria-label', 'Previous page');
+  previous.disabled = currentPage === 1;
+  previous.onclick = () => changePage(-1);
+  pagination.append(previous);
+
+  for (let page = 1; page <= totalPages; page++) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = `w3-bar-item w3-button ${page === currentPage ? 'w3-teal' : 'w3-hover-teal'}`;
+    button.textContent = String(page);
+    button.setAttribute('aria-label', `Page ${page}`);
+    if (page === currentPage) button.setAttribute('aria-current', 'page');
+    button.onclick = () => goToPage(page);
+    pagination.append(button);
+  }
+
+  const next = document.createElement('button');
+  next.type = 'button';
+  next.className = 'w3-bar-item w3-button w3-hover-teal';
+  next.textContent = '»';
+  next.setAttribute('aria-label', 'Next page');
+  next.disabled = currentPage === totalPages;
+  next.onclick = () => changePage(1);
+  pagination.append(next);
 }
 
 function changePage(direction) {
@@ -423,16 +542,32 @@ function goToPage(pageNum) {
 
 // Filtering Logic
 function filterFood(category) {
+  if (!['all', 'main', 'snack', 'drink'].includes(category)) return;
   foodItems.forEach(item => {
-    if (category === 'all' || item.classList.contains(category)) {
+    if (category === 'all' || item.dataset.category === category) {
       item.dataset.filtered = 'true';
     } else {
       item.dataset.filtered = 'false';
     }
   });
+  document.querySelectorAll('.filter-btn').forEach(button => {
+    const active = button.dataset.category === category;
+    button.classList.toggle('w3-black', active);
+    button.classList.toggle('w3-white', !active);
+    button.setAttribute('aria-pressed', String(active));
+  });
   currentPage = 1;
   renderPagination();
 }
+
+document.querySelectorAll('.filter-btn').forEach(button => {
+  button.addEventListener('click', () => {
+    filterFood(button.dataset.category);
+    button.classList.remove('filter-clicked');
+    void button.offsetWidth;
+    button.classList.add('filter-clicked');
+  });
+});
 
 // Initial Render
 renderPagination();
