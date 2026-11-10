@@ -19,10 +19,7 @@
 
   <!-- Sidebar/menu (Reference example.html: w3-sidebar w3-collapse w3-white w3-animate-left) -->
   <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" id="mySidebar">
-    <div class="w3-container w3-hide-large">
-      <button data-action="menu-close" class="w3-button w3-hide-large w3-right w3-large" aria-label="Close menu">&times;</button>
-    </div>
-    
+    <button data-action="menu-close" class="w3-button w3-hide-large w3-right w3-large sidebar-close-btn" aria-label="Close menu">&times;</button>
     <div class="w3-bar-block w3-padding-16">
       <a href="#home" data-action="menu-close" class="w3-bar-item w3-button nav-link">
         <i class="fa fa-home fa-fw w3-margin-right"></i>HOME
@@ -36,6 +33,12 @@
       <a href="#contact" data-action="menu-close" class="w3-bar-item w3-button nav-link">
         <i class="fa fa-phone fa-fw w3-margin-right"></i>CONTACT
       </a>
+      <a href="#menu" data-action="wheel-open" class="w3-bar-item w3-button nav-link sidebar-food-prompt">
+        <i class="fa fa-question-circle fa-fw w3-margin-right" aria-hidden="true"></i>DON'T KNOW WHAT TO EAT?
+      </a>
+      <button type="button" id="musicToggleBtn" data-action="music-toggle" aria-pressed="true" class="w3-bar-item w3-button nav-link music-toggle-btn">
+        <i id="musicToggleIcon" class="fa fa-volume-off fa-fw w3-margin-right" aria-hidden="true"></i><span id="musicToggleLabel">UNMUTE MUSIC</span>
+      </button>
     </div>
   </nav>
 
@@ -91,6 +94,27 @@
         <div class="checkout-header" id="checkoutHeader">
           <h2 class="checkout-title">Express Checkout</h2>
           <p class="checkout-subtitle">Zero delivery fee on campus. Hot & fresh delivered straight to your dorm building.</p>
+        </div>
+
+        <div class="checkout-sea-life" aria-hidden="true">
+          <svg viewBox="0 0 520 96" focusable="false">
+            <g fill="none" stroke="#69c9c3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M58 92c-4-19 2-36 0-56m0 36C43 61 39 48 40 36m19 25c11-12 15-25 13-39M87 92c3-15-2-28 4-44m-4 27c-11-7-16-17-16-27m16 17c8-8 11-17 10-27" stroke-width="5"/>
+              <path d="M432 92c4-19-2-36 0-56m0 36c15-11 19-24 18-36m-19 25c-11-12-15-25-13-39m-15 70c-3-15 2-28-4-44m4 27c11-7 16-17 16-27m-16 17c-8-8-11-17-10-27" stroke-width="5"/>
+            </g>
+            <g fill="none" stroke="#f4a261" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
+              <path d="M219 56c-13-14-26-13-32-4-5 8 2 16 12 18m102-14c13-14 26-13 32-4 5 8-2 16-12 18M215 54l-13-13m18 12-5-18m105 19 13-13m-18 12 5-18"/>
+              <path d="M236 48c0-12 11-20 24-20s24 8 24 20v13c0 13-11 21-24 21s-24-8-24-21z" fill="#e76f51"/>
+              <path d="M244 79l-10 10m22-7v10m22-13 10 10"/>
+              <path d="M247 35v-7m26 7v-7"/>
+              <circle cx="247" cy="48" r="2.5" fill="#18384a" stroke="none"/>
+              <circle cx="273" cy="48" r="2.5" fill="#18384a" stroke="none"/>
+              <path d="M254 57q7 6 14 0" stroke="#18384a" stroke-width="2.5"/>
+            </g>
+            <g fill="#90e0ef" opacity=".9">
+              <circle cx="151" cy="59" r="3"/><circle cx="165" cy="38" r="2"/><circle cx="359" cy="45" r="3"/><circle cx="371" cy="68" r="2"/>
+            </g>
+          </svg>
         </div>
 
         <div class="checkout-grid">
@@ -181,6 +205,7 @@
               </button>
             </form>
           </div>
+          <img class="delivery-motorcycle" src="images/checkout-motorcycle.png" alt="" aria-hidden="true">
         </div>
       </div>
     </section>
@@ -189,7 +214,7 @@
     <footer id="contact" class="site-footer">
       <div class="footer-contact">
         <img src="images/contact.png" alt="Contact Us" class="footer-contact-img">
-        <span>1234-567-890</span>
+        <span>0966092556</span>
       </div>
       <div class="footer-credit">
         Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank" rel="noopener noreferrer">w3.css</a>
@@ -240,6 +265,10 @@
     <span id="cartBtnTotal" class="cart-btn-total">$0.00</span>
   </div>
 
+  <audio id="backgroundMusic" autoplay loop preload="auto" muted>
+    <source src="music/Oceans%20(Where%20Feet%20May%20Fail).mp3" type="audio/mpeg">
+  </audio>
+
   <!-- Cart Slide-in Drawer -->
   <div id="cartDrawerOverlay" class="cart-drawer-overlay" data-action="cart-toggle"></div>
   <aside id="cartDrawer" class="cart-drawer">
@@ -278,6 +307,26 @@
         Back to Menu
       </button>
     </div>
+  </div>
+
+  <!-- Food picker wheel -->
+  <div id="foodWheelOverlay" class="modal-overlay wheel-overlay" data-action="wheel-overlay" aria-hidden="true">
+    <div id="wheelFireworks" class="wheel-fireworks" aria-hidden="true"></div>
+    <section class="wheel-modal" role="dialog" aria-modal="true" aria-labelledby="wheelTitle">
+      <button class="modal-close-btn" data-action="wheel-close" aria-label="Close food wheel">&times;</button>
+      <h2 id="wheelTitle">What should you eat?</h2>
+      <p>Spin the wheel and let fate choose.</p>
+      <div class="wheel-pointer" aria-hidden="true"></div>
+      <div class="wheel-frame">
+        <svg id="foodWheel" viewBox="0 0 500 500" role="img" aria-label="Wheel with all ten menu items"></svg>
+      </div>
+      <button id="spinWheelBtn" type="button" class="spin-wheel-btn" data-action="wheel-spin">SPIN</button>
+      <p id="wheelResult" class="wheel-result" aria-live="polite"></p>
+    </section>
+  </div>
+
+  <div id="volleyballCursor" class="volleyball-cursor" aria-hidden="true">
+    <img src="images/volleyball-cursor.png" alt="" draggable="false" />
   </div>
 
   <script src="script.js"></script>

@@ -24,10 +24,6 @@ body, h1, h2, h3, h4, h5, h6 {
   font-family: "Raleway", sans-serif;
 }
 
-body.on-hero #floatingCartBtn {
-  display: none;
-}
-
 /* Boxed Container for Menu, Checkout & Footer (1600px centered on wide screens) */
 .boxed-content {
   max-width: 1600px;
@@ -142,7 +138,7 @@ body.on-hero #floatingCartBtn {
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  border-radius: 0;
+  border-radius: 50px;
   text-decoration: none;
   box-shadow: 0 8px 24px rgba(231, 111, 81, 0.45);
   transition: all 0.35s ease;
@@ -177,13 +173,19 @@ body.on-hero #floatingCartBtn {
   max-height: calc(100vh - 48px);
   z-index: 100;
   width: 280px;
-  border-radius: 16px;
-  border-right: 2px solid rgba(224, 247, 250, 0.6);
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.92);
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
   overflow-y: auto;
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+
+.sidebar-close-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 2;
 }
 
 #menuToggleBtn {
@@ -216,10 +218,6 @@ body.on-hero #floatingCartBtn {
 }
 
 @media (min-width: 993px) {
-  .hero-bottom-gradient {
-    height: 140px;
-  }
-
   /* On Hero: sidebar is hidden so hero image fills 100vw */
   body.on-hero #mySidebar {
     transform: translateX(-100%) !important;
@@ -247,8 +245,8 @@ body.on-hero #floatingCartBtn {
 
 @media (max-width: 992px) {
   #mySidebar {
-    left: 0 !important;
-    margin-left: 16px;
+    left: 16px !important;
+    width: calc(100vw - 32px);
   }
   .boxed-inner {
     margin-left: 0 !important;
@@ -274,11 +272,40 @@ body.on-hero #floatingCartBtn {
    Menu Page (Dusk Sunset Theme)
    ========================================================================== */
 .menu-section {
+  position: relative;
+  isolation: isolate;
   --section-background: linear-gradient(180deg, var(--dusk-bg-start) 0%, var(--dusk-bg-mid) 50%, var(--dusk-bg-end) 100%);
   background: var(--section-background);
-  padding: 64px 32px;
+  background-color: var(--dusk-bg-end);
+  background-size: 100% 50%;
+  background-repeat: no-repeat;
+  padding: 128px 32px 21.333px;
   color: var(--text-dark);
   min-height: 100vh;
+}
+
+.menu-section::after,
+.checkout-section::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: auto 0 0;
+  height: 128px;
+  pointer-events: none;
+  opacity: 0.24;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.8) 0 2px, transparent 2.5px),
+    radial-gradient(circle, rgba(144, 224, 239, 0.9) 0 3px, transparent 3.5px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 160' preserveAspectRatio='none'%3E%3Cpath fill='%230077b6' d='M0 74c180 54 308-50 494-4s282 56 467 8 310-41 479 16v66H0z'/%3E%3Cpath fill='%2390e0ef' d='M0 112c166-38 300 25 471 15s301-58 482-22 307 65 487 18v37H0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 14% 25%, 84% 50%, center bottom;
+  background-size: 42px 42px, 58px 58px, 100% 100%;
+}
+
+.menu-section > *,
+.checkout-container {
+  position: relative;
+  z-index: 1;
 }
 
 .section-header {
@@ -486,7 +513,8 @@ body.on-hero #floatingCartBtn {
   justify-content: center;
   align-items: center;
   gap: 8px;
-  margin-top: 48px;
+  margin-top: 192px;
+  height: 56px;
 }
 
 .page-btn {
@@ -522,13 +550,17 @@ body.on-hero #floatingCartBtn {
    ========================================================================== */
 @media (min-width: 993px) {
   .menu-section {
-    height: 100vh;
-    max-height: 100vh;
-    padding: 22px 36px 14px;
+    height: 130vh;
+    max-height: none;
+    padding: 44px 36px calc(4.6667px + 10vh);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
+  }
+
+  .hero-bottom-gradient {
+    height: 140px;
   }
 
   .section-header {
@@ -546,7 +578,7 @@ body.on-hero #floatingCartBtn {
   }
 
   .filter-bar {
-    margin: 10px 0 12px;
+    margin: 10px 0 44px;
     gap: 10px;
   }
 
@@ -642,8 +674,9 @@ body.on-hero #floatingCartBtn {
   }
 
   .pagination-container {
-    margin-top: 8px;
+    margin-top: 32px;
     margin-bottom: 2px;
+    height: 29px;
     flex: 0 0 29px;
   }
 
@@ -674,6 +707,191 @@ body.on-hero #floatingCartBtn {
 .modal-overlay.open {
   display: flex;
   animation: modal-fade-in 0.25s ease-out;
+}
+
+.wheel-overlay {
+  z-index: 250;
+}
+
+.wheel-fireworks {
+  position: fixed;
+  z-index: 2;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.wheel-firework-spark {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: 0 0 12px 3px currentColor, 0 0 26px 8px currentColor, 0 0 42px rgba(255,255,255,.8);
+  animation: wheel-firework-burst 1150ms cubic-bezier(.12,.7,.25,1) forwards;
+}
+
+@keyframes wheel-firework-burst {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(.7); }
+  18% { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--spark-x)), calc(-50% + var(--spark-y))) scale(.25); }
+}
+
+.wheel-modal {
+  position: relative;
+  width: min(540px, 92vw);
+  height: min(560px, 90vh);
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 24px 24px 16px;
+  border-radius: 0;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.wheel-modal .modal-close-btn {
+  display: none;
+}
+
+.wheel-modal::-webkit-scrollbar {
+  display: none;
+}
+
+.wheel-modal h2 {
+  margin: 0 20px 2px;
+  color: var(--ocean-deep);
+  font-weight: 800;
+  font-size: 1.4rem;
+}
+
+.wheel-modal > p {
+  margin: 0 0 8px;
+  color: #60717d;
+}
+
+.wheel-frame {
+  width: min(380px, 68vw, 53vh);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border: 8px solid #f1c75b;
+  border-radius: 50%;
+  box-shadow: 0 8px 22px rgba(16, 42, 58, 0.2);
+  overflow: hidden;
+}
+
+#foodWheel {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+}
+
+.wheel-pointer {
+  position: absolute;
+  z-index: 2;
+  top: 103px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%);
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 28px solid #e4572e;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
+}
+
+.spin-wheel-btn {
+  margin-top: 10px;
+  padding: 9px 30px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ocean-deep);
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.spin-wheel-btn:hover:not(:disabled) {
+  background: var(--ocean-mid);
+}
+
+.spin-wheel-btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.wheel-modal .wheel-result {
+  min-height: 1.2em;
+  margin: 6px 0 0;
+  color: var(--ocean-deep);
+  font-weight: 800;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.volleyball-cursor-enabled,
+  body.volleyball-cursor-enabled * {
+    cursor: none !important;
+  }
+}
+
+.volleyball-cursor {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(var(--ball-tilt, 0deg));
+  transition: opacity 0.12s ease;
+  will-change: left, top, transform;
+}
+
+.volleyball-cursor img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 4px rgba(8, 35, 50, 0.3));
+}
+
+.volleyball-trail-particle {
+  position: fixed;
+  z-index: 999;
+  width: var(--trail-size, 5px);
+  height: var(--trail-size, 5px);
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(125,224,255,.88) 48%, rgba(52,161,210,.42) 78%, transparent 100%);
+  box-shadow: 0 0 12px rgba(117, 212, 238, 0.72), 0 0 22px rgba(68, 183, 228, 0.34);
+  animation: volleyball-trail-fade 760ms ease-out forwards;
+}
+
+@keyframes volleyball-trail-fade {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+  100% { opacity: 0; transform: translate(-50%, -78%) scale(0.12); }
+}
+
+@media (max-width: 520px) {
+  .wheel-modal {
+    width: 90vw;
+    height: min(560px, 90vh);
+    padding: 20px 12px 12px;
+  }
+  .wheel-modal h2 {
+    font-size: 1.2rem;
+  }
+  .wheel-modal > p { font-size: 0.9rem; }
+  .wheel-frame {
+    width: min(360px, 72vw, 54vh);
+  }
+  .wheel-pointer {
+    top: 84px;
+  }
 }
 
 .modal-card {
@@ -852,6 +1070,10 @@ body.on-hero #floatingCartBtn {
   gap: 12px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.on-hero #floatingCartBtn {
+  display: none;
 }
 
 .floating-cart-btn:hover {
@@ -1066,7 +1288,7 @@ body.on-hero #floatingCartBtn {
   color: #ffffff;
   border: none;
   padding: 14px;
-  border-radius: 10px;
+  border-radius: 0;
   font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
@@ -1087,21 +1309,47 @@ body.on-hero #floatingCartBtn {
    Checkout Page (Evening Tone Transition)
    ========================================================================== */
 .checkout-section {
-  --section-background: linear-gradient(180deg, #ecd2c1 0, var(--evening-bg-start) 220px, var(--evening-bg-end) 280px, var(--evening-bg-end) 100%);
+  position: relative;
+  isolation: isolate;
+  --section-background: linear-gradient(180deg, #ecd2c1 0%, var(--evening-bg-start) 4.1667%, var(--evening-bg-start) 100%);
   background: var(--section-background);
-  padding: 280px 32px 80px;
+  background-color: var(--evening-bg-start);
+  background-size: 100% 220%;
+  background-repeat: no-repeat;
+  padding: 80px 16px 80px;
   color: #ffffff;
   min-height: 100vh;
 }
 
+@media (min-width: 993px) {
+  .checkout-section {
+    padding-top: 180px;
+  }
+}
+
 .checkout-container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 .checkout-header {
   text-align: center;
   margin-bottom: 48px;
+}
+
+.checkout-sea-life {
+  width: min(100%, 520px);
+  height: 78px;
+  margin: -34px auto 12px;
+  opacity: 0.92;
+  filter: drop-shadow(0 3px 6px rgba(3, 19, 31, 0.22));
+}
+
+.checkout-sea-life svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
 .checkout-title {
@@ -1118,9 +1366,38 @@ body.on-hero #floatingCartBtn {
 }
 
 .checkout-grid {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1.3fr;
   gap: 36px;
+}
+
+.delivery-motorcycle {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.3));
+  offset-path: inset(-26px -26px round 2px);
+  offset-anchor: center;
+  offset-rotate: auto;
+  offset-distance: 0%;
+  animation: checkout-motorcycle-lap 16s linear infinite;
+}
+
+@keyframes checkout-motorcycle-lap {
+  to { offset-distance: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .delivery-motorcycle {
+    animation: none;
+    offset-distance: 0%;
+  }
 }
 
 @media (max-width: 860px) {
@@ -1162,6 +1439,17 @@ body.on-hero #floatingCartBtn {
   padding: 10px 0;
   border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
   font-size: 0.95rem;
+}
+
+.summary-item-qty {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 0;
+  color: #ffd3a8;
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
 }
 
 .summary-totals {
@@ -1407,6 +1695,11 @@ body.on-hero #floatingCartBtn {
     isolation: isolate;
   }
 
+  .site-footer {
+    width: calc(100% + 280px);
+    margin-left: -280px;
+  }
+
   .checkout-section::before,
   .site-footer::before {
     content: "";
@@ -1414,9 +1707,19 @@ body.on-hero #floatingCartBtn {
     z-index: -1;
     top: -1px;
     bottom: -1px;
-    left: min(-280px, calc((1600px - 100vw) / 2 - 280px));
     width: 100vw;
     background: var(--section-background);
+  }
+
+  .checkout-section::before {
+    left: min(-280px, calc((1600px - 100vw) / 2 - 280px));
+    background-color: var(--evening-bg-start);
+    background-size: 100% 220%;
+    background-repeat: no-repeat;
+  }
+
+  .site-footer::before {
+    left: min(0px, calc((1600px - 100vw) / 2));
   }
 
   .boxed-inner {
@@ -1432,8 +1735,11 @@ body.on-hero #floatingCartBtn {
     bottom: auto;
     left: min(-280px, calc((1600px - 100vw) / 2 - 280px));
     width: 100vw;
-    height: calc(100vh + 2px);
+    height: calc(130vh + 2px);
     background: linear-gradient(180deg, var(--dusk-bg-start) 0%, var(--dusk-bg-mid) 50%, var(--dusk-bg-end) 100%);
+    background-color: var(--dusk-bg-end);
+    background-size: 100% 50%;
+    background-repeat: no-repeat;
   }
 }
 
