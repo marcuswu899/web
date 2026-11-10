@@ -38,6 +38,9 @@
       <a href="#contact" data-action="menu-close" class="w3-bar-item w3-button nav-link">
         <i class="fa fa-phone fa-fw w3-margin-right"></i>CONTACT
       </a>
+      <a href="#menu" data-action="wheel-open" class="w3-bar-item w3-button nav-link sidebar-food-prompt">
+        <i class="fa fa-question-circle fa-fw w3-margin-right" aria-hidden="true"></i>DON'T KNOW WHAT TO EAT?
+      </a>
     </div>
   </nav>
 
@@ -280,6 +283,29 @@
         Back to Menu
       </button>
     </div>
+  </div>
+
+  <!-- Food picker wheel -->
+  <div id="foodWheelOverlay" class="modal-overlay wheel-overlay" data-action="wheel-overlay" aria-hidden="true">
+    <section class="wheel-modal" role="dialog" aria-modal="true" aria-labelledby="wheelTitle">
+      <button class="modal-close-btn" data-action="wheel-close" aria-label="Close food wheel">&times;</button>
+      <h2 id="wheelTitle">What should you eat?</h2>
+      <p>Spin the wheel and let fate choose.</p>
+      <div class="wheel-pointer" aria-hidden="true"></div>
+      <div class="wheel-frame">
+        <svg id="foodWheel" viewBox="0 0 500 500" role="img" aria-label="Wheel with all ten menu items"></svg>
+      </div>
+      <button id="spinWheelBtn" type="button" class="spin-wheel-btn" data-action="wheel-spin">SPIN</button>
+      <p id="wheelResult" class="wheel-result" aria-live="polite"></p>
+    </section>
+  </div>
+
+  <div id="volleyballCursor" class="volleyball-cursor" aria-hidden="true">
+    <svg viewBox="0 0 48 48" focusable="false">
+      <circle cx="24" cy="24" r="22" fill="#fff" stroke="#18384a" stroke-width="2" />
+      <path d="M7 12c8 2 15 7 18 15 2 6 2 11 1 17M25 2c-1 9 2 16 9 21 4 3 8 4 12 4M3 27c8-4 16-4 23 0 6 3 10 8 12 15M13 5c5 6 12 9 20 8 5-1 9-3 12-6" fill="none" stroke="#2484a6" stroke-width="3.2" stroke-linecap="round" />
+      <path d="M8 38c5-5 11-7 18-6 6 1 11 4 15 9" fill="none" stroke="#f1c75b" stroke-width="2.5" stroke-linecap="round" />
+    </svg>
   </div>
 
   <script src="script.js"></script>

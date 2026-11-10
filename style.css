@@ -664,6 +664,167 @@ body, h1, h2, h3, h4, h5, h6 {
   animation: modal-fade-in 0.25s ease-out;
 }
 
+.wheel-overlay {
+  z-index: 250;
+}
+
+.wheel-modal {
+  position: relative;
+  width: min(540px, 92vw);
+  height: min(560px, 90vh);
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 24px 24px 16px;
+  border-radius: 0;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.wheel-modal .modal-close-btn {
+  display: none;
+}
+
+.wheel-modal::-webkit-scrollbar {
+  display: none;
+}
+
+.wheel-modal h2 {
+  margin: 0 20px 2px;
+  color: var(--ocean-deep);
+  font-weight: 800;
+  font-size: 1.4rem;
+}
+
+.wheel-modal > p {
+  margin: 0 0 8px;
+  color: #60717d;
+}
+
+.wheel-frame {
+  width: min(380px, 68vw, 53vh);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border: 8px solid #f1c75b;
+  border-radius: 50%;
+  box-shadow: 0 8px 22px rgba(16, 42, 58, 0.2);
+  overflow: hidden;
+}
+
+#foodWheel {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+}
+
+.wheel-pointer {
+  position: absolute;
+  z-index: 2;
+  top: 103px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%);
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 28px solid #e4572e;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
+}
+
+.spin-wheel-btn {
+  margin-top: 10px;
+  padding: 9px 30px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ocean-deep);
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.spin-wheel-btn:hover:not(:disabled) {
+  background: var(--ocean-mid);
+}
+
+.spin-wheel-btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.wheel-modal .wheel-result {
+  min-height: 1.2em;
+  margin: 6px 0 0;
+  color: var(--ocean-deep);
+  font-weight: 800;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.volleyball-cursor-enabled,
+  body.volleyball-cursor-enabled * {
+    cursor: none !important;
+  }
+}
+
+.volleyball-cursor {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(var(--ball-tilt, 0deg));
+  transition: opacity 0.12s ease;
+  will-change: left, top, transform;
+}
+
+.volleyball-cursor svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 3px rgba(8, 35, 50, 0.35));
+}
+
+.volleyball-trail-particle {
+  position: fixed;
+  z-index: 999;
+  width: var(--trail-size, 5px);
+  height: var(--trail-size, 5px);
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255,255,255,.9) 0%, rgba(115,204,230,.45) 70%, transparent 100%);
+  box-shadow: 0 0 8px rgba(117, 212, 238, 0.38);
+  animation: volleyball-trail-fade 520ms ease-out forwards;
+}
+
+@keyframes volleyball-trail-fade {
+  0% { opacity: 0.72; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -62%) scale(0.2); }
+}
+
+@media (max-width: 520px) {
+  .wheel-modal {
+    width: 90vw;
+    height: min(560px, 90vh);
+    padding: 20px 12px 12px;
+  }
+  .wheel-modal h2 {
+    font-size: 1.2rem;
+  }
+  .wheel-modal > p { font-size: 0.9rem; }
+  .wheel-frame {
+    width: min(360px, 72vw, 54vh);
+  }
+  .wheel-pointer {
+    top: 84px;
+  }
+}
+
 .modal-card {
   background: #ffffff;
   border-radius: 18px;

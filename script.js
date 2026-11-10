@@ -99,6 +99,9 @@
     let cart = {}; // { itemId: quantity }
     let activeModalItem = null;
     let activeModalQty = 1;
+    let wheelSpinning = false;
+    let lastCursorPoint = null;
+    let cursorTrailTick = 0;
 
     // DOM Elements
     const foodGrid = document.getElementById("foodGrid");
@@ -115,9 +118,41 @@
     // Initialize Page
     document.addEventListener("DOMContentLoaded", () => {
       initHeroObserver();
+      initVolleyballCursor();
       renderMenu();
       updateCartUI();
     });
+
+    function initVolleyballCursor() {
+      if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const ball = document.getElementById("volleyballCursor");
+      document.body.classList.add("volleyball-cursor-enabled");
+      document.addEventListener("pointermove", event => {
+        const x = event.clientX;
+        const y = event.clientY;
+        ball.style.left = `${x}px`;
+        ball.style.top = `${y}px`;
+        if (lastCursorPoint) {
+          const dx = x - lastCursorPoint.x;
+          const dy = y - lastCursorPoint.y;
+          const distance = Math.hypot(dx, dy);
+          if (distance > 5 && cursorTrailTick++ % 2 === 0) {
+            const arc = Math.min(18, distance * 0.16);
+            const particle = document.createElement("span");
+            particle.className = "volleyball-trail-particle";
+            particle.style.left = `${x - dx * 0.32}px`;
+            particle.style.top = `${y - dy * 0.32 - arc}px`;
+            particle.style.setProperty("--trail-size", `${Math.max(3, Math.min(8, distance * 0.12))}px`);
+            document.body.appendChild(particle);
+            particle.addEventListener("animationend", () => particle.remove(), { once: true });
+          }
+          ball.style.setProperty("--ball-tilt", `${Math.max(-30, Math.min(30, dx * 1.8))}deg`);
+        }
+        lastCursorPoint = { x, y };
+      }, { passive: true });
+      document.addEventListener("pointerleave", () => { ball.style.opacity = "0"; });
+      document.addEventListener("pointerenter", () => { ball.style.opacity = "1"; });
+    }
 
     document.addEventListener("click", event => {
       const target = event.target.closest("[data-action], .food-card, .quick-add-btn, .page-btn, .cart-qty-btn");
@@ -147,11 +182,71 @@
           case "cart-toggle": toggleCartDrawer(); break;
           case "cart-checkout": proceedToCheckoutFromCart(); break;
           case "success-close": closeSuccessModal(); break;
+          case "wheel-open": event.preventDefault(); openFoodWheel(); break;
+          case "wheel-close": closeFoodWheel(); break;
+          case "wheel-overlay": if (event.target.id === "foodWheelOverlay") closeFoodWheel(); break;
+          case "wheel-spin": spinFoodWheel(); break;
         }
       }
     });
 
     document.getElementById("checkoutForm").addEventListener("submit", handlePlaceOrder);
+
+    function openFoodWheel() {
+      renderFoodWheel();
+      const wheelOverlay = document.getElementById("foodWheelOverlay");
+      wheelOverlay.classList.add("open");
+      wheelOverlay.setAttribute("aria-hidden", "false");
+      document.getElementById("wheelResult").textContent = "";
+    }
+
+    function closeFoodWheel() {
+      if (wheelSpinning) return;
+      const wheelOverlay = document.getElementById("foodWheelOverlay");
+      wheelOverlay.classList.remove("open");
+      wheelOverlay.setAttribute("aria-hidden", "true");
+    }
+
+    function renderFoodWheel() {
+      const svg = document.getElementById("foodWheel");
+      const colors = ["#073b4c", "#118ab2", "#06a77d", "#f4a261", "#e76f51", "#264653", "#2a9d8f", "#e9c46a", "#457b9d", "#9b5de5"];
+      const cx = 250, cy = 250, radius = 242;
+      const slice = 360 / MENU_ITEMS.length;
+      const polar = (angle, r) => ({ x: cx + r * Math.cos((angle - 90) * Math.PI / 180), y: cy + r * Math.sin((angle - 90) * Math.PI / 180) });
+      svg.innerHTML = MENU_ITEMS.map((item, i) => {
+        const start = i * slice, end = start + slice;
+        const p1 = polar(start, radius), p2 = polar(end, radius), mid = start + slice / 2;
+        const label = polar(mid, 158);
+        const words = item.name.split(" ");
+        const firstLine = words.slice(0, Math.ceil(words.length / 2)).join(" ");
+        const secondLine = words.slice(Math.ceil(words.length / 2)).join(" ");
+        const text = secondLine
+          ? `<text x="${label.x}" y="${label.y - 8}" transform="rotate(${mid} ${label.x} ${label.y})" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-size="13" font-weight="700"><tspan x="${label.x}" dy="0">${firstLine}</tspan><tspan x="${label.x}" dy="15">${secondLine}</tspan></text>`
+          : `<text x="${label.x}" y="${label.y}" transform="rotate(${mid} ${label.x} ${label.y})" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-size="13" font-weight="700">${firstLine}</text>`;
+        return `<path d="M ${cx} ${cy} L ${p1.x} ${p1.y} A ${radius} ${radius} 0 0 1 ${p2.x} ${p2.y} Z" fill="${colors[i % colors.length]}" stroke="#fff" stroke-width="2"/>${text}`;
+      }).join("") + '<circle cx="250" cy="250" r="20" fill="#fff" stroke="#102a3a" stroke-width="4"/>';
+      svg.style.transform = "rotate(0deg)";
+    }
+
+    function spinFoodWheel() {
+      if (wheelSpinning) return;
+      wheelSpinning = true;
+      const btn = document.getElementById("spinWheelBtn");
+      const wheel = document.getElementById("foodWheel");
+      const result = document.getElementById("wheelResult");
+      btn.disabled = true;
+      result.textContent = "Spinning…";
+      const chosenIndex = Math.floor(Math.random() * MENU_ITEMS.length);
+      const slice = 360 / MENU_ITEMS.length;
+      const targetAngle = 360 * 6 + (360 - (chosenIndex * slice + slice / 2));
+      wheel.style.transition = "transform 4s cubic-bezier(.12,.78,.12,1)";
+      wheel.style.transform = `rotate(${targetAngle}deg)`;
+      wheel.addEventListener("transitionend", () => {
+        result.textContent = `You got: ${MENU_ITEMS[chosenIndex].name}!`;
+        btn.disabled = false;
+        wheelSpinning = false;
+      }, { once: true });
+    }
 
     // Auto-hide sidebar on Hero, show & fix on Menu/Checkout
     function initHeroObserver() {
