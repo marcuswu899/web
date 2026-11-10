@@ -177,7 +177,10 @@
             document.body.appendChild(particle);
             particle.addEventListener("animationend", () => particle.remove(), { once: true });
           }
-          ball.style.setProperty("--ball-tilt", `${Math.max(-30, Math.min(30, dx * 1.8))}deg`);
+          if (distance > 1) {
+            const heading = Math.atan2(dy, dx) * (180 / Math.PI);
+            ball.style.setProperty("--fish-angle", `${heading}deg`);
+          }
         }
         lastCursorPoint = { x, y };
       }, { passive: true });
@@ -229,7 +232,7 @@
       wheelSpinCount = 0;
       wheelRotation = 0;
       const wheelOverlay = document.getElementById("foodWheelOverlay");
-      document.getElementById("wheelFireworks").innerHTML = "";
+      document.getElementById("wheelWaterSplash").innerHTML = "";
       wheelOverlay.classList.add("open");
       wheelOverlay.setAttribute("aria-hidden", "false");
       document.getElementById("wheelResult").textContent = "";
@@ -284,37 +287,64 @@
       wheel.style.transform = `rotate(${targetAngle}deg)`;
       wheel.addEventListener("transitionend", () => {
         result.textContent = `You got: ${MENU_ITEMS[chosenIndex].name}!`;
-        launchWheelFireworks();
+        launchWheelSplashEffect();
         btn.disabled = false;
         wheelSpinning = false;
       }, { once: true });
     }
 
-    function launchWheelFireworks() {
-      const layer = document.getElementById("wheelFireworks");
-      const colors = ["#ffd166", "#ef476f", "#06d6a0", "#4cc9f0", "#fff3b0", "#f78c6b"];
+    function launchWheelSplashEffect() {
+      const layer = document.getElementById("wheelWaterSplash");
+      const wheelFrame = document.querySelector(".wheel-frame");
+      if (!wheelFrame) return;
+      const frame = wheelFrame.getBoundingClientRect();
       layer.innerHTML = "";
-      for (let burst = 0; burst < 7; burst++) {
-        const centerX = 10 + Math.random() * 80;
-        const centerY = 14 + Math.random() * 72;
-        const count = 24;
-        for (let i = 0; i < count; i++) {
-          const angle = (Math.PI * 2 * i) / count + Math.random() * 0.16;
-          const distance = 50 + Math.random() * 105;
-          const spark = document.createElement("i");
-          spark.className = "wheel-firework-spark";
-          spark.style.left = `${centerX}%`;
-          spark.style.top = `${centerY}%`;
-          const color = colors[Math.floor(Math.random() * colors.length)];
-          spark.style.backgroundColor = color;
-          spark.style.color = color;
-          spark.style.setProperty("--spark-x", `${Math.cos(angle) * distance}px`);
-          spark.style.setProperty("--spark-y", `${Math.sin(angle) * distance}px`);
-          spark.style.animationDelay = `${burst * 100}ms`;
-          layer.appendChild(spark);
+      const splashPoints = [];
+      while (splashPoints.length < 13) {
+        const position = 0.035 + Math.random() * 0.93;
+        if (splashPoints.every(existing => Math.abs(existing - position) > 0.045)) {
+          splashPoints.push(position);
         }
       }
-      window.setTimeout(() => { layer.innerHTML = ""; }, 1800);
+      splashPoints.forEach(position => {
+        const centerX = frame.left + frame.width * position + (Math.random() - 0.5) * 20;
+        const centerY = frame.bottom - 8 - Math.random() * 42;
+        const burstDelay = Math.random() * 220;
+        const ring = document.createElement("i");
+        ring.className = "wheel-splash-ring";
+        ring.style.left = `${centerX}px`;
+        ring.style.top = `${centerY}px`;
+        ring.style.animationDelay = `${burstDelay}ms`;
+        layer.appendChild(ring);
+
+        const foamRing = document.createElement("i");
+        foamRing.className = "wheel-splash-ring wheel-splash-ring-secondary";
+        foamRing.style.left = `${centerX + (Math.random() - 0.5) * 12}px`;
+        foamRing.style.top = `${centerY + 3}px`;
+        foamRing.style.animationDelay = `${burstDelay + 100}ms`;
+        layer.appendChild(foamRing);
+
+        const count = 10;
+        for (let i = 0; i < count; i++) {
+          const angle = -Math.PI + (Math.PI * i) / (count - 1) + (Math.random() - 0.5) * 0.16;
+          const distance = 76 + Math.random() * 124;
+          const drop = document.createElement("i");
+          drop.className = "wheel-splash-drop";
+          if (i % 5 === 0) drop.classList.add("wheel-splash-bubble");
+          drop.style.left = `${centerX}px`;
+          drop.style.top = `${centerY}px`;
+          drop.style.setProperty("--drop-width", `${6 + Math.random() * 8}px`);
+          drop.style.setProperty("--drop-height", `${10 + Math.random() * 13}px`);
+          drop.style.setProperty("--splash-x", `${Math.cos(angle) * distance}px`);
+          drop.style.setProperty("--splash-y", `${Math.max(18, distance * (0.35 + Math.random() * 0.22))}px`);
+          drop.style.setProperty("--splash-apex-x", `${Math.cos(angle) * distance * 0.68}px`);
+          drop.style.setProperty("--splash-apex-y", `${Math.sin(angle) * distance}px`);
+          drop.style.setProperty("--drop-rotation", `${(angle * 180 / Math.PI) + 90}deg`);
+          drop.style.animationDelay = `${burstDelay + Math.random() * 110}ms`;
+          layer.appendChild(drop);
+        }
+      });
+      window.setTimeout(() => { layer.innerHTML = ""; }, 1900);
     }
 
     // Auto-hide sidebar on Hero, show & fix on Menu/Checkout
