@@ -13,36 +13,36 @@
 <body class="on-hero">
 
   <!-- Mobile Menu Toggle Button (Only appears on small screens / w3-hide-large) -->
-  <button id="menuToggleBtn" class="w3-hide-large" onclick="w3_open()" aria-label="Open Navigation Menu">
+  <button id="menuToggleBtn" class="w3-hide-large" data-action="menu-open" aria-label="Open Navigation Menu">
     <i class="fa fa-bars" aria-hidden="true"></i>
   </button>
 
   <!-- Sidebar/menu (Reference example.html: w3-sidebar w3-collapse w3-white w3-animate-left) -->
   <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" id="mySidebar">
     <div class="w3-container w3-padding-24" style="background-color: var(--ocean-deep); color: white;">
-      <button onclick="w3_close()" class="w3-button w3-hide-large w3-right w3-large" aria-label="Close menu">&times;</button>
+      <button data-action="menu-close" class="w3-button w3-hide-large w3-right w3-large" aria-label="Close menu">&times;</button>
       <h3 class="w3-margin-0"><b>OceanBite</b></h3>
       <p class="w3-small w3-text-light-grey w3-margin-0">Virtual Kitchen for Campus</p>
     </div>
     
     <div class="w3-bar-block w3-padding-16">
-      <a href="#home" onclick="w3_close()" class="w3-bar-item w3-button nav-link">
+      <a href="#home" data-action="menu-close" class="w3-bar-item w3-button nav-link">
         <i class="fa fa-home fa-fw w3-margin-right"></i>HOME
       </a>
-      <a href="#menu" onclick="w3_close()" class="w3-bar-item w3-button nav-link">
+      <a href="#menu" data-action="menu-close" class="w3-bar-item w3-button nav-link">
         <i class="fa fa-cutlery fa-fw w3-margin-right"></i>MENU
       </a>
-      <a href="#checkout" onclick="w3_close()" class="w3-bar-item w3-button nav-link">
+      <a href="#checkout" data-action="menu-close" class="w3-bar-item w3-button nav-link">
         <i class="fa fa-credit-card fa-fw w3-margin-right"></i>CHECKOUT
       </a>
-      <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button nav-link">
+      <a href="#contact" data-action="menu-close" class="w3-bar-item w3-button nav-link">
         <i class="fa fa-phone fa-fw w3-margin-right"></i>CONTACT
       </a>
     </div>
   </nav>
 
   <!-- Overlay effect when opening sidebar on small screens -->
-  <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer; z-index:99;" title="Close side menu" id="myOverlay"></div>
+  <div class="w3-overlay w3-hide-large w3-animate-opacity" data-action="menu-close" style="cursor:pointer; z-index:99;" title="Close side menu" id="myOverlay"></div>
 
   <!-- Main Content Wrapper -->
   <main class="w3-main">
@@ -121,7 +121,7 @@
           <!-- Checkout Details Form Card -->
           <div class="checkout-form-card">
             <h3><i class="fa fa-truck w3-margin-right"></i>Delivery & Payment Details</h3>
-            <form id="checkoutForm" onsubmit="handlePlaceOrder(event)">
+            <form id="checkoutForm">
               <div class="form-group">
                 <label for="studentName">Student Full Name</label>
                 <input type="text" id="studentName" required placeholder="e.g. Alex Wu">
@@ -155,17 +155,17 @@
               <div class="form-group">
                 <label>Payment Method</label>
                 <div class="payment-options">
-                  <label class="payment-label selected" onclick="selectPayment(this)">
+                  <label class="payment-label selected" data-action="select-payment">
                     <input type="radio" name="paymentMethod" value="Cash on Delivery" checked>
                     <i class="fa fa-money"></i>
                     <span>Cash on Delivery</span>
                   </label>
-                  <label class="payment-label" onclick="selectPayment(this)">
+                  <label class="payment-label" data-action="select-payment">
                     <input type="radio" name="paymentMethod" value="Credit Card">
                     <i class="fa fa-credit-card"></i>
                     <span>Credit Card</span>
                   </label>
-                  <label class="payment-label" onclick="selectPayment(this)">
+                  <label class="payment-label" data-action="select-payment">
                     <input type="radio" name="paymentMethod" value="Mobile Payment">
                     <i class="fa fa-mobile"></i>
                     <span>Mobile Payment</span>
@@ -204,9 +204,9 @@
   </main>
 
   <!-- Detail Lightbox Modal -->
-  <div id="detailModalOverlay" class="modal-overlay" onclick="closeModalOnOverlay(event)">
+  <div id="detailModalOverlay" class="modal-overlay" data-action="modal-overlay">
     <div class="modal-card">
-      <button class="modal-close-btn" onclick="closeDetailModal()" aria-label="Close details">&times;</button>
+      <button class="modal-close-btn" data-action="modal-close" aria-label="Close details">&times;</button>
       <div class="modal-img-area">
         <i id="modalIcon" class="fa fa-cutlery food-placeholder-icon" style="font-size:4.5rem;"></i>
         <span class="food-placeholder-text">OceanBite Kitchen Spec</span>
@@ -221,11 +221,11 @@
 
         <div class="modal-actions-row">
           <div class="qty-control">
-            <button type="button" class="qty-btn" onclick="adjustModalQty(-1)">&minus;</button>
+            <button type="button" class="qty-btn" data-action="modal-qty" data-delta="-1">&minus;</button>
             <span id="modalQtyDisplay" class="qty-display">1</span>
-            <button type="button" class="qty-btn" onclick="adjustModalQty(1)">&plus;</button>
+            <button type="button" class="qty-btn" data-action="modal-qty" data-delta="1">&plus;</button>
           </div>
-          <button type="button" class="modal-add-btn" onclick="addCurrentModalToCart()">
+          <button type="button" class="modal-add-btn" data-action="modal-add">
             <i class="fa fa-cart-plus"></i> Add to Cart
           </button>
         </div>
@@ -234,7 +234,7 @@
   </div>
 
   <!-- Floating Cart Button -->
-  <div id="floatingCartBtn" class="floating-cart-btn" onclick="toggleCartDrawer()">
+  <div id="floatingCartBtn" class="floating-cart-btn" data-action="cart-toggle">
     <div class="cart-icon-wrapper">
       <i class="fa fa-shopping-cart" style="font-size:1.35rem;"></i>
       <span id="cartCountBadge" class="cart-count-badge">0</span>
@@ -243,11 +243,11 @@
   </div>
 
   <!-- Cart Slide-in Drawer -->
-  <div id="cartDrawerOverlay" class="cart-drawer-overlay" onclick="toggleCartDrawer()"></div>
+  <div id="cartDrawerOverlay" class="cart-drawer-overlay" data-action="cart-toggle"></div>
   <aside id="cartDrawer" class="cart-drawer">
     <div class="cart-drawer-header">
       <h3 class="cart-drawer-title"><i class="fa fa-shopping-basket"></i> Your Cart</h3>
-      <button class="cart-close-btn" onclick="toggleCartDrawer()" aria-label="Close cart">&times;</button>
+      <button class="cart-close-btn" data-action="cart-toggle" aria-label="Close cart">&times;</button>
     </div>
     <div id="cartItemsList" class="cart-items-list">
       <!-- Items dynamically populated -->
@@ -257,7 +257,7 @@
         <span>Total:</span>
         <span id="cartDrawerSubtotal">$0.00</span>
       </div>
-      <button class="checkout-btn" onclick="proceedToCheckoutFromCart()">
+      <button class="checkout-btn" data-action="cart-checkout">
         Proceed to Checkout <i class="fa fa-arrow-right"></i>
       </button>
     </div>
@@ -276,427 +276,13 @@
         <!-- Order info dynamically populated -->
       </div>
 
-      <button class="success-close-btn" onclick="closeSuccessModal()">
+      <button class="success-close-btn" data-action="success-close">
         Back to Menu
       </button>
     </div>
   </div>
 
-  <!-- Main Application Script -->
-  <script>
-    // 10 Menu Items per 設計.md
-    const MENU_ITEMS = [
-      {
-        id: "squid-ink-pasta",
-        name: "Squid Ink Pasta",
-        category: "staples",
-        categoryLabel: "Staples",
-        price: 12.99,
-        icon: "fa-cutlery",
-        desc: "Rich authentic squid ink linguine tossed with calamari rings, garlic butter, sea salt, and extra virgin olive oil."
-      },
-      {
-        id: "clam-pasta",
-        name: "Clam Pasta",
-        category: "staples",
-        categoryLabel: "Staples",
-        price: 10.99,
-        icon: "fa-cutlery",
-        desc: "Fresh ocean clams simmered in white wine garlic broth over al dente spaghetti, finished with garden parsley."
-      },
-      {
-        id: "shrimp-pasta",
-        name: "Shrimp Pasta",
-        category: "staples",
-        categoryLabel: "Staples",
-        price: 11.49,
-        icon: "fa-cutlery",
-        desc: "Tender ocean shrimp pan-seared with cherry tomatoes and tossed in a creamy sun-dried tomato pesto pasta."
-      },
-      {
-        id: "salmon-risotto",
-        name: "Salmon Risotto",
-        category: "staples",
-        categoryLabel: "Staples",
-        price: 12.49,
-        icon: "fa-spoon",
-        desc: "Slow-cooked Italian arborio rice infused with savory herb broth and topped with a golden seared salmon fillet."
-      },
-      {
-        id: "octopus-risotto",
-        name: "Octopus Risotto",
-        category: "staples",
-        categoryLabel: "Staples",
-        price: 11.99,
-        icon: "fa-spoon",
-        desc: "Tender braised octopus tentacles folded into a creamy saffron risotto with parmesan and lemon zest."
-      },
-      {
-        id: "clam-risotto",
-        name: "Clam Risotto",
-        category: "staples",
-        categoryLabel: "Staples",
-        price: 10.49,
-        icon: "fa-spoon",
-        desc: "Velvety clam broth risotto cooked to perfection with sweet baby clams, melted butter, and fresh herbs."
-      },
-      {
-        id: "lobster-salad",
-        name: "Lobster Salad",
-        category: "drinks-snacks",
-        categoryLabel: "Drinks & Snacks",
-        price: 8.99,
-        icon: "fa-leaf",
-        desc: "Chunky succulent lobster meat tossed with crisp garden greens, creamy avocado slices, and honey citrus vinaigrette."
-      },
-      {
-        id: "crab-stick-salad",
-        name: "Crab Stick Salad",
-        category: "drinks-snacks",
-        categoryLabel: "Drinks & Snacks",
-        price: 6.99,
-        icon: "fa-leaf",
-        desc: "Shredded snow crab sticks paired with julienned cucumbers, sweet corn kernels, and fragrant roasted sesame dressing."
-      },
-      {
-        id: "seafood-chowder",
-        name: "Seafood Chowder",
-        category: "drinks-snacks",
-        categoryLabel: "Drinks & Snacks",
-        price: 5.49,
-        icon: "fa-coffee",
-        desc: "Hearty traditional Atlantic chowder loaded with tender clams, white fish fillets, diced potatoes, and cream."
-      },
-      {
-        id: "honey-lemon-water",
-        name: "Honey lemon water",
-        category: "drinks-snacks",
-        categoryLabel: "Drinks & Snacks",
-        price: 2.99,
-        icon: "fa-glass",
-        desc: "Cold freshly squeezed organic lemon juice lightly sweetened with wildflower honey and garnished with mint leaves."
-      }
-    ];
-
-    // State Variables
-    let currentCategory = "all";
-    let currentPage = 1;
-    const ITEMS_PER_PAGE = 6;
-    let cart = {}; // { itemId: quantity }
-    let activeModalItem = null;
-    let activeModalQty = 1;
-
-    // DOM Elements
-    const foodGrid = document.getElementById("foodGrid");
-    const pagination = document.getElementById("pagination");
-    const filterBtns = document.querySelectorAll(".filter-btn");
-    const sidebar = document.getElementById("mySidebar");
-    const overlay = document.getElementById("myOverlay");
-    const cartDrawer = document.getElementById("cartDrawer");
-    const cartDrawerOverlay = document.getElementById("cartDrawerOverlay");
-    const cartCountBadge = document.getElementById("cartCountBadge");
-    const cartBtnTotal = document.getElementById("cartBtnTotal");
-    const floatingCartBtn = document.getElementById("floatingCartBtn");
-
-    // Initialize Page
-    document.addEventListener("DOMContentLoaded", () => {
-      initHeroObserver();
-      renderMenu();
-      updateCartUI();
-    });
-
-    // Auto-hide sidebar on Hero, show & fix on Menu/Checkout
-    function initHeroObserver() {
-      const heroSection = document.getElementById("home");
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            document.body.classList.add("on-hero");
-            if (window.innerWidth <= 992) {
-              w3_close();
-            }
-          } else {
-            document.body.classList.remove("on-hero");
-          }
-        });
-      }, { threshold: 0.25 });
-
-      observer.observe(heroSection);
-    }
-
-    // Sidebar functions (reference example.html)
-    function w3_open() {
-      sidebar.style.display = "block";
-      overlay.style.display = "block";
-    }
-
-    function w3_close() {
-      sidebar.style.display = "none";
-      overlay.style.display = "none";
-    }
-
-    // 2. Menu Filtering & Pagination
-    filterBtns.forEach(btn => {
-      btn.addEventListener("click", () => {
-        filterBtns.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        currentCategory = btn.dataset.category;
-        currentPage = 1;
-        renderMenu();
-      });
-    });
-
-    function getFilteredItems() {
-      if (currentCategory === "all") return MENU_ITEMS;
-      return MENU_ITEMS.filter(item => item.category === currentCategory);
-    }
-
-    function renderMenu() {
-      const items = getFilteredItems();
-      const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
-      if (currentPage > totalPages) currentPage = totalPages;
-
-      const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-      const displayItems = items.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-
-      // Render Cards
-      foodGrid.innerHTML = displayItems.map(item => `
-        <article class="food-card" onclick="openDetailModal('${item.id}')">
-          <div class="food-img-container">
-            <i class="fa ${item.icon} food-placeholder-icon"></i>
-            <span class="food-placeholder-text">Photo Placeholder</span>
-          </div>
-          <div class="food-card-body">
-            <div class="food-header">
-              <h3 class="food-title">${item.name}</h3>
-              <span class="food-price">$${item.price.toFixed(2)}</span>
-            </div>
-            <p class="food-desc">${item.desc}</p>
-            <div class="food-action">
-              <span class="view-detail-hint"><i class="fa fa-info-circle"></i> Click to customize</span>
-              <button type="button" class="quick-add-btn" onclick="event.stopPropagation(); quickAddToCart('${item.id}')" title="Quick Add">
-                <i class="fa fa-plus"></i>
-              </button>
-            </div>
-          </div>
-        </article>
-      `).join("");
-
-      // Render Pagination Buttons
-      if (totalPages <= 1) {
-        pagination.innerHTML = "";
-      } else {
-        let pagHtml = `<button type="button" class="page-btn" onclick="changePage(-1)" ${currentPage === 1 ? 'disabled' : ''}>&laquo;</button>`;
-        for (let i = 1; i <= totalPages; i++) {
-          pagHtml += `<button type="button" class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
-        }
-        pagHtml += `<button type="button" class="page-btn" onclick="changePage(1)" ${currentPage === totalPages ? 'disabled' : ''}>&raquo;</button>`;
-        pagination.innerHTML = pagHtml;
-      }
-    }
-
-    function changePage(direction) {
-      currentPage += direction;
-      renderMenu();
-      document.getElementById("menu").scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function goToPage(page) {
-      currentPage = page;
-      renderMenu();
-      document.getElementById("menu").scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // 3. Detail Lightbox Modal
-    function openDetailModal(itemId) {
-      const item = MENU_ITEMS.find(m => m.id === itemId);
-      if (!item) return;
-
-      activeModalItem = item;
-      activeModalQty = 1;
-
-      document.getElementById("modalTitle").textContent = item.name;
-      document.getElementById("modalPrice").textContent = `$${item.price.toFixed(2)}`;
-      document.getElementById("modalCategory").textContent = item.categoryLabel;
-      document.getElementById("modalDesc").textContent = item.desc;
-      document.getElementById("modalIcon").className = `fa ${item.icon} food-placeholder-icon`;
-      document.getElementById("modalQtyDisplay").textContent = activeModalQty;
-
-      document.getElementById("detailModalOverlay").classList.add("open");
-    }
-
-    function closeDetailModal() {
-      document.getElementById("detailModalOverlay").classList.remove("open");
-      activeModalItem = null;
-    }
-
-    function closeModalOnOverlay(e) {
-      if (e.target.id === "detailModalOverlay") {
-        closeDetailModal();
-      }
-    }
-
-    function adjustModalQty(delta) {
-      activeModalQty = Math.max(1, activeModalQty + delta);
-      document.getElementById("modalQtyDisplay").textContent = activeModalQty;
-    }
-
-    function addCurrentModalToCart() {
-      if (!activeModalItem) return;
-      addToCart(activeModalItem.id, activeModalQty);
-      closeDetailModal();
-    }
-
-    function quickAddToCart(itemId) {
-      addToCart(itemId, 1);
-    }
-
-    // 4. Cart Operations & Slide-in Drawer
-    function addToCart(itemId, quantity = 1) {
-      cart[itemId] = (cart[itemId] || 0) + quantity;
-      updateCartUI();
-      bumpCartBtn();
-    }
-
-    function changeCartItemQty(itemId, delta) {
-      if (!cart[itemId]) return;
-      cart[itemId] += delta;
-      if (cart[itemId] <= 0) {
-        delete cart[itemId];
-      }
-      updateCartUI();
-    }
-
-    function bumpCartBtn() {
-      floatingCartBtn.classList.remove("bump");
-      void floatingCartBtn.offsetWidth; // trigger reflow
-      floatingCartBtn.classList.add("bump");
-    }
-
-    function toggleCartDrawer() {
-      const isOpen = cartDrawer.classList.contains("open");
-      cartDrawer.classList.toggle("open", !isOpen);
-      cartDrawerOverlay.classList.toggle("open", !isOpen);
-    }
-
-    function updateCartUI() {
-      let totalCount = 0;
-      let totalAmount = 0;
-      const cartItemsList = document.getElementById("cartItemsList");
-      const checkoutSummaryList = document.getElementById("checkoutSummaryList");
-
-      let itemsHtml = "";
-      let summaryHtml = "";
-
-      const itemIds = Object.keys(cart);
-
-      if (itemIds.length === 0) {
-        itemsHtml = `
-          <div class="cart-empty-message">
-            <i class="fa fa-shopping-basket cart-empty-icon"></i>
-            <p>Your cart is empty.</p>
-            <span class="w3-small">Add delicious dorm meals to begin!</span>
-          </div>
-        `;
-        summaryHtml = `<div class="w3-text-grey w3-center w3-padding-16">No items selected yet. Choose your favorite meals from the menu above!</div>`;
-      } else {
-        itemIds.forEach(id => {
-          const item = MENU_ITEMS.find(m => m.id === id);
-          if (!item) return;
-
-          const qty = cart[id];
-          const subtotal = item.price * qty;
-          totalCount += qty;
-          totalAmount += subtotal;
-
-          itemsHtml += `
-            <div class="cart-item">
-              <div class="cart-item-info">
-                <h4 class="cart-item-title">${item.name}</h4>
-                <span class="cart-item-price">$${item.price.toFixed(2)} &times; ${qty} = $${subtotal.toFixed(2)}</span>
-              </div>
-              <div class="cart-item-controls">
-                <button type="button" class="cart-qty-btn" onclick="changeCartItemQty('${id}', -1)">&minus;</button>
-                <span class="cart-qty-num">${qty}</span>
-                <button type="button" class="cart-qty-btn" onclick="changeCartItemQty('${id}', 1)">&plus;</button>
-              </div>
-            </div>
-          `;
-
-          summaryHtml += `
-            <div class="summary-item-row">
-              <div>
-                <b>${item.name}</b> <span class="w3-text-grey">&times; ${qty}</span>
-              </div>
-              <span>$${subtotal.toFixed(2)}</span>
-            </div>
-          `;
-        });
-      }
-
-      cartItemsList.innerHTML = itemsHtml;
-      checkoutSummaryList.innerHTML = summaryHtml;
-
-      cartCountBadge.textContent = totalCount;
-      cartBtnTotal.textContent = `$${totalAmount.toFixed(2)}`;
-      document.getElementById("cartDrawerSubtotal").textContent = `$${totalAmount.toFixed(2)}`;
-      document.getElementById("checkoutSubtotal").textContent = `$${totalAmount.toFixed(2)}`;
-      document.getElementById("checkoutGrandTotal").textContent = `$${totalAmount.toFixed(2)}`;
-    }
-
-    function proceedToCheckoutFromCart() {
-      toggleCartDrawer();
-      document.getElementById("checkout").scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // 5. Checkout & Payment Selection
-    function selectPayment(element) {
-      document.querySelectorAll(".payment-label").forEach(l => l.classList.remove("selected"));
-      element.classList.add("selected");
-      element.querySelector('input[type="radio"]').checked = true;
-    }
-
-    function handlePlaceOrder(event) {
-      event.preventDefault();
-
-      const itemIds = Object.keys(cart);
-      if (itemIds.length === 0) {
-        alert("Your cart is empty! Please choose items from the menu before placing an order.");
-        document.getElementById("menu").scrollIntoView({ behavior: 'smooth' });
-        return;
-      }
-
-      const studentName = document.getElementById("studentName").value.trim();
-      const studentPhone = document.getElementById("studentPhone").value.trim();
-      const dormBuilding = document.getElementById("dormBuilding").value;
-      const roomNumber = document.getElementById("roomNumber").value.trim();
-      const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-      const grandTotal = document.getElementById("checkoutGrandTotal").textContent;
-
-      const orderNumber = "OB-" + Math.floor(100000 + Math.random() * 900000);
-
-      document.getElementById("successOrderDetails").innerHTML = `
-        <div><b>Order Number:</b> ${orderNumber}</div>
-        <div><b>Customer:</b> ${studentName} (${studentPhone})</div>
-        <div><b>Campus Delivery To:</b> ${dormBuilding}, Room ${roomNumber}</div>
-        <div><b>Payment:</b> ${paymentMethod} (${grandTotal})</div>
-        <div><b>Estimated Delivery Time:</b> 20 - 30 mins</div>
-      `;
-
-      document.getElementById("orderSuccessOverlay").classList.add("open");
-
-      // Reset cart and form
-      cart = {};
-      updateCartUI();
-      document.getElementById("checkoutForm").reset();
-      selectPayment(document.querySelector('.payment-label'));
-    }
-
-    function closeSuccessModal() {
-      document.getElementById("orderSuccessOverlay").classList.remove("open");
-      document.getElementById("menu").scrollIntoView({ behavior: 'smooth' });
-    }
-  </script>
+  <script src="script.js"></script>
 
 </body>
 </html>
