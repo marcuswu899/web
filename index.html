@@ -1,583 +1,702 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>OceanBite | Campus Virtual Kitchen</title>
+  <title>OceanBite Virtual Kitchen</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/6/w3.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:300,400,600,700,800">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-  <style>
-    body, h1, h2, h3, h4, h5, h6 { font-family: "Raleway", sans-serif; }
-    
-    /* Ocean Theme Color Palette */
-    :root {
-      --ocean-deep: #0f4c81;
-      --ocean-mid: #0077b6;
-      --ocean-light: #90e0ef;
-      --ocean-bg: #eaf7f6;
-      --sand-gold: #f4a261;
-    }
-
-    body {
-      background-color: var(--ocean-bg);
-      background-image: linear-gradient(180deg, #b9e8f2 0%, #e7f5ef 34%, #f8e6c7 100%);
-      background-attachment: fixed;
-    }
-    .w3-main { transition: margin-left 0.3s ease; }
-    .order-section {
-      background: linear-gradient(135deg, #5d9fb3 0%, #9acbd1 100%);
-    }
-    #mySidebar.menu-hidden { display: none !important; }
-    @media (min-width: 993px) {
-      .w3-main.menu-collapsed { margin-left: 0 !important; }
-    }
-
-    /* Desktop keeps the menu on the left; mobile starts with it closed. */
-    @media (max-width: 992px) {
-      #mySidebar { display: none; }
-      .w3-main { margin-left: 0 !important; }
-    }
-    @media (min-width: 993px) {
-      #mySidebar { display: block; }
-    }
-
-    /* Sunset beach hero background */
-    .ocean-header {
-      background-image:
-        linear-gradient(180deg, rgba(18, 35, 58, 0.16), rgba(18, 35, 58, 0.26)),
-        url("https://images.unsplash.com/photo-1768622180477-5043d6dcdfcc?auto=format&fit=crop&fm=jpg&q=80&w=2000");
-      background-size: cover;
-      background-position: center 72%;
-      background-repeat: no-repeat;
-      color: white;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .ocean-badge {
-      background-color: var(--sand-gold);
-      color: #fff;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 0.85em;
-      font-weight: bold;
-    }
-
-    /* Food Card Hover Animations */
-    .food-card {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border-radius: 8px;
-      overflow: hidden;
-      background: white;
-    }
-    .food-card .food-img { flex: 0 0 200px; }
-    .food-card > .w3-container {
-      display: flex;
-      flex: 1;
-      flex-direction: column;
-      align-items: stretch;
-      text-align: left;
-    }
-    .food-card .ocean-badge {
-      align-self: flex-end;
-      float: none;
-      padding: 3px 8px;
-      font-size: 0.72rem;
-      line-height: 1.2;
-    }
-    .food-card h4 {
-      min-height: 2.8em;
-      margin: 0.35em 0 0.1em;
-      line-height: 1.4;
-    }
-    .food-card p {
-      flex: 1;
-      margin-top: 0.1em;
-      line-height: 1.55;
-    }
-    .food-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(15, 76, 129, 0.2);
-    }
-    .food-card .food-img {
-      transition: transform 0.45s ease, opacity 0.3s ease;
-    }
-    .food-card:hover .food-img { transform: scale(1.045); }
-    .filter-btn {
-      border-radius: 999px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
-    }
-    .filter-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 14px rgba(15, 76, 129, 0.2);
-    }
-    .filter-btn:active { transform: scale(0.94); }
-    .filter-btn[aria-pressed="true"] {
-      background-color: var(--ocean-deep) !important;
-      color: #fff !important;
-      box-shadow: 0 4px 12px rgba(15, 76, 129, 0.25);
-    }
-    .filter-btn.filter-clicked { animation: filter-tap 0.38s ease; }
-    @keyframes filter-tap {
-      0% { transform: scale(1); }
-      45% { transform: scale(0.92); }
-      100% { transform: scale(1); }
-    }
-    .food-card-enter { animation: food-enter 0.38s ease both; }
-    @keyframes food-enter {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .filter-btn, .food-card-enter { animation: none !important; transition: none !important; }
-    }
-
-    .food-img {
-      cursor: pointer;
-      transition: opacity 0.3s ease;
-      height: 200px;
-      object-fit: cover;
-      width: 100%;
-    }
-    .food-img:hover { opacity: 0.85; }
-
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="w3-content" style="max-width:1600px">
+<body class="on-hero">
 
-<!-- Sidebar/menu -->
-<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px; border-right: 2px solid #e0f7fa;" id="mySidebar">
-  <div class="w3-container w3-padding-16" style="background-color: var(--ocean-deep); color: white;">
-    <button onclick="w3_close()" class="w3-button w3-hide-large w3-right w3-jumbo" title="Close menu" aria-label="Close navigation menu">×</button>
-    <h3><i class="fa fa-cutlery w3-margin-right"></i><b>OceanBite</b></h3>
-    <p class="w3-text-light-grey">Virtual Kitchen for Campus</p>
-  </div>
-  <div class="w3-bar-block w3-padding-16">
-    <a href="#menu" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>FOOD MENU</a>
-    <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-info-circle fa-fw w3-margin-right"></i>ABOUT OUR CONCEPT</a>
-    <a href="#order" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-shopping-cart fa-fw w3-margin-right"></i>QUICK ORDER</a>
-  </div>
-  
-  <div class="w3-panel w3-padding-16">
-    <div class="w3-card w3-light-blue w3-padding w3-round">
-      <h5><i class="fa fa-bolt"></i> Student Perks</h5>
-      <p class="w3-small">Free dorm delivery on orders over $15! Speed delivery guaranteed before midnight.</p>
+  <!-- Mobile Menu Toggle Button (Only appears on small screens / w3-hide-large) -->
+  <button id="menuToggleBtn" class="w3-hide-large" onclick="w3_open()" aria-label="Open Navigation Menu">
+    <i class="fa fa-bars" aria-hidden="true"></i>
+  </button>
+
+  <!-- Sidebar/menu (Reference example.html: w3-sidebar w3-collapse w3-white w3-animate-left) -->
+  <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" id="mySidebar">
+    <div class="w3-container w3-padding-24" style="background-color: var(--ocean-deep); color: white;">
+      <button onclick="w3_close()" class="w3-button w3-hide-large w3-right w3-large" aria-label="Close menu">&times;</button>
+      <h3 class="w3-margin-0"><b>OceanBite</b></h3>
+      <p class="w3-small w3-text-light-grey w3-margin-0">Virtual Kitchen for Campus</p>
     </div>
-  </div>
-
-  <div class="w3-panel w3-large w3-text-teal">
-    <i class="fa fa-facebook-official w3-hover-opacity"></i>
-    <i class="fa fa-instagram w3-hover-opacity"></i>
-    <i class="fa fa-twitter w3-hover-opacity"></i>
-  </div>
-</nav>
-
-<!-- Overlay effect when opening sidebar on small screens -->
-<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="Close side menu" id="myOverlay"></div>
-
-<!-- Page content -->
-<main class="w3-main" style="margin-left:300px">
-
-  <!-- Header -->
-  <header id="menu" class="ocean-header w3-container w3-padding-24">
-    <button id="menuToggle" class="w3-button w3-xxlarge w3-hover-text-grey" onclick="toggleMenu()" aria-label="Toggle navigation menu" aria-controls="mySidebar" aria-expanded="false"><i class="fa fa-bars" aria-hidden="true"></i></button>
-    <div class="w3-container">
-      <h1><b>OceanBite Virtual Kitchen</b></h1>
-      <p class="w3-large">Fresh, Fast & Affordable Campus Food Delivery</p>
-      
-      <!-- Filter Section (Retained as required) -->
-      <div class="w3-section w3-padding-16" style="border-top: 1px solid rgba(255,255,255,0.2);">
-        <span class="w3-margin-right"><b>Filter:</b></span>
-        <button type="button" class="w3-button w3-black filter-btn" data-category="all" aria-pressed="true">ALL</button>
-        <button type="button" class="w3-button w3-white filter-btn" data-category="main" aria-pressed="false"><i class="fa fa-cutlery w3-margin-right"></i>Main Dishes</button>
-        <button type="button" class="w3-button w3-white filter-btn" data-category="snack" aria-pressed="false"><i class="fa fa-bolt w3-margin-right"></i>Quick Bites</button>
-        <button type="button" class="w3-button w3-white filter-btn" data-category="drink" aria-pressed="false"><i class="fa fa-coffee w3-margin-right"></i>Drinks & Desserts</button>
-      </div>
+    
+    <div class="w3-bar-block w3-padding-16">
+      <a href="#home" onclick="w3_close()" class="w3-bar-item w3-button nav-link">
+        <i class="fa fa-home fa-fw w3-margin-right"></i>HOME
+      </a>
+      <a href="#menu" onclick="w3_close()" class="w3-bar-item w3-button nav-link">
+        <i class="fa fa-cutlery fa-fw w3-margin-right"></i>MENU
+      </a>
+      <a href="#checkout" onclick="w3_close()" class="w3-bar-item w3-button nav-link">
+        <i class="fa fa-credit-card fa-fw w3-margin-right"></i>CHECKOUT
+      </a>
+      <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button nav-link">
+        <i class="fa fa-phone fa-fw w3-margin-right"></i>CONTACT
+      </a>
     </div>
-  </header>
-
-  <!-- Food Grid Container (Max 6 posts per page) -->
-  <div class="w3-container w3-padding-32">
-    <div id="foodGrid" class="w3-grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px">
-      
-      <!-- Item 1 -->
-      <article class="food-card food-item main" data-category="main">
-        <div class="w3-container w3-padding">
-          <span class="ocean-badge w3-right">$9.99</span>
-          <h4><b>Deep Sea Ocean Bowl</b></h4>
-          <p class="w3-text-grey w3-small">Fresh salmon poke bowl served over seasoned brown rice, edamame, seaweed salad, and signature sesame sauce.</p>
-        </div>
-      </article>
-
-      <!-- Item 2 -->
-      <article class="food-card food-item main" data-category="main">
-        <div class="w3-container w3-padding">
-          <span class="ocean-badge w3-right">$7.49</span>
-          <h4><b>Atlantic Crispy Fish Burger</b></h4>
-          <p class="w3-text-grey w3-small">Golden fried cod fillet topped with tangy tartar sauce, fresh lettuce, and toasted brioche buns.</p>
-        </div>
-      </article>
-
-      <!-- Item 3 -->
-      <article class="food-card food-item snack" data-category="snack">
-        <div class="w3-container w3-padding">
-          <span class="ocean-badge w3-right">$4.29</span>
-          <h4><b>Tidal Wave Garlic Fries</b></h4>
-          <p class="w3-text-grey w3-small">Crispy thick-cut fries tossed with roasted garlic butter, parsley, and sea salt. Perfect for late-night study sessions!</p>
-        </div>
-      </article>
-
-      <!-- Item 4 -->
-      <article class="food-card food-item main" data-category="main">
-        <div class="w3-container w3-padding">
-          <span class="ocean-badge w3-right">$8.99</span>
-          <h4><b>Sailor Grilled Chicken Rice</b></h4>
-          <p class="w3-text-grey w3-small">Herb-marinated grilled chicken breast served with steamed veggies and fragrant jasmine rice.</p>
-        </div>
-      </article>
-
-      <!-- Item 5 -->
-      <article class="food-card food-item drink" data-category="drink">
-        <div class="w3-container w3-padding">
-          <span class="ocean-badge w3-right">$3.50</span>
-          <h4><b>Blue Lagoon Sparkler</b></h4>
-          <p class="w3-text-grey w3-small">Refreshing blue curacao citrus soda with sparkling water, lemon mint slices, and crushed ice.</p>
-        </div>
-      </article>
-
-      <!-- Item 6 -->
-      <article class="food-card food-item main" data-category="main">
-        <div class="w3-container w3-padding">
-          <span class="ocean-badge w3-right">$11.49</span>
-          <h4><b>Coral Reef Seafood Pasta</b></h4>
-          <p class="w3-text-grey w3-small">Rich garlic cream pasta with juicy shrimp, mussels, and squid sprinkled with parmesan cheese.</p>
-        </div>
-      </article>
-
-      <!-- Item 7 -->
-      <article class="food-card food-item snack" data-category="snack">
-        <div class="w3-container w3-padding">
-          <span class="ocean-badge w3-right">$6.99</span>
-          <h4><b>Captain's Chicken Wings</b></h4>
-          <p class="w3-text-grey w3-small">Six pieces of crispy fried wings glazed with spicy honey BBQ sauce. Served with ranch dip.</p>
-        </div>
-      </article>
-
-      <!-- Item 8 -->
-      <article class="food-card food-item drink" data-category="drink">
-        <div class="w3-container w3-padding">
-          <span class="ocean-badge w3-right">$4.99</span>
-          <h4><b>Ocean Mist Matcha Latte</b></h4>
-          <p class="w3-text-grey w3-small">Premium Japanese matcha layered with fresh oat milk and sea-salt cream foam topping.</p>
-        </div>
-      </article>
-
-      <!-- Item 9 -->
-      <article class="food-card food-item main" data-category="main">
-        <div class="w3-container w3-padding">
-          <span class="ocean-badge w3-right">$6.49</span>
-          <h4><b>Island Veggie Wrap</b></h4>
-          <p class="w3-text-grey w3-small">Whole wheat tortilla stuffed with avocado, hummus, cucumber, spinach, and sweet peppers.</p>
-        </div>
-      </article>
-
-      <!-- Item 10 -->
-      <article class="food-card food-item drink" data-category="drink">
-        <div class="w3-container w3-padding">
-          <span class="ocean-badge w3-right">$3.99</span>
-          <h4><b>Sea Salt Chocolate Mousse</b></h4>
-          <p class="w3-text-grey w3-small">Velvety dark chocolate mousse infused with flaky sea salt and topped with whipped cream.</p>
-        </div>
-      </article>
-
-    </div>
-  </div>
-
-  <!-- Pagination is generated from the currently filtered menu items. -->
-  <nav class="w3-center w3-padding-16" aria-label="Menu pages">
-    <div class="w3-bar" id="pagination"></div>
   </nav>
 
-  <hr style="border-top: 2px solid #e0f7fa;">
+  <!-- Overlay effect when opening sidebar on small screens -->
+  <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer; z-index:99;" title="Close side menu" id="myOverlay"></div>
 
-  <!-- About Concept Section -->
-  <section class="w3-container w3-padding-32" id="about">
-    <h2><b>About OceanBite</b></h2>
-    <p class="w3-large w3-text-dark-grey">100% Virtual Kitchen Built Exclusively for College Students.</p>
-    <div class="w3-row-padding w3-margin-top">
-      <div class="w3-third w3-margin-bottom">
-        <div class="w3-card w3-padding w3-center w3-white">
-          <i class="fa fa-fighter-jet w3-jumbo w3-text-teal"></i>
-          <h4><b>Fast Campus Delivery</b></h4>
-          <p>Delivered straight to your dorm entrance or campus gate in under 30 minutes.</p>
+  <!-- Main Content Wrapper -->
+  <main class="w3-main">
+
+    <!-- 1. Hero Landing Page Section (100vw Full Bleed Background) -->
+    <section id="home" class="hero-section">
+      <img src="images/home.png" alt="OceanBite Campus Virtual Kitchen" class="hero-bg">
+      <div class="hero-overlay"></div>
+      <div class="hero-bottom-gradient"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">OceanBite Virtual Kitchen</h1>
+        <p class="hero-subtitle">Pause the Books, Taste the Ocean.</p>
+        <a href="#menu" class="start-order-btn">
+          <i class="fa fa-arrow-down w3-margin-right"></i>Start Order
+        </a>
+      </div>
+    </section>
+
+    <!-- Boxed Content (1600px Max-Width Centered with margins on wide screens) -->
+    <div class="boxed-content">
+      <div class="boxed-inner">
+
+    <!-- 2. Menu Page Section (Dusk Sunset Theme) -->
+    <section id="menu" class="menu-section">
+      <div class="section-header">
+        <h2 class="section-title">Campus Virtual Menu</h2>
+        <p class="section-subtitle">Freshly prepared sea-inspired cuisine, speed-delivered to your dorm entrance.</p>
+
+        <!-- Category Filter -->
+        <div class="filter-bar">
+          <span class="filter-label">Filter:</span>
+          <button type="button" class="filter-btn active" data-category="all">All</button>
+          <button type="button" class="filter-btn" data-category="staples">Staples</button>
+          <button type="button" class="filter-btn" data-category="drinks-snacks">Drinks & Snacks</button>
         </div>
       </div>
-      <div class="w3-third w3-margin-bottom">
-        <div class="w3-card w3-padding w3-center w3-white">
-          <i class="fa fa-dollar w3-jumbo w3-text-teal"></i>
-          <h4><b>Student Friendly Prices</b></h4>
-          <p>Budget-conscious meal options starting from $3.50 with zero hidden platform fees.</p>
+
+      <!-- Food Grid (Max 6 per page) -->
+      <div id="foodGrid" class="food-grid"></div>
+
+      <!-- Pagination -->
+      <div id="pagination" class="pagination-container"></div>
+    </section>
+
+    <!-- 3. Checkout Page Section (Evening Tone Transition) -->
+    <section id="checkout" class="checkout-section">
+      <div class="checkout-container">
+        <div class="checkout-header">
+          <h2 class="checkout-title">Express Checkout</h2>
+          <p class="checkout-subtitle">Zero delivery fee on campus. Hot & fresh delivered straight to your dorm building.</p>
+        </div>
+
+        <div class="checkout-grid">
+          <!-- Order Summary Card -->
+          <div class="summary-card">
+            <h3><i class="fa fa-list-alt w3-margin-right"></i>Order Summary</h3>
+            <div id="checkoutSummaryList" class="summary-items">
+              <!-- Dynamically populated -->
+            </div>
+            <div class="summary-totals">
+              <div class="summary-line">
+                <span>Subtotal</span>
+                <span id="checkoutSubtotal">$0.00</span>
+              </div>
+              <div class="summary-line">
+                <span>Campus Speed Delivery</span>
+                <span class="w3-text-green" style="font-weight:700;">FREE</span>
+              </div>
+              <div class="summary-line grand-total">
+                <span>Grand Total</span>
+                <span id="checkoutGrandTotal">$0.00</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Checkout Details Form Card -->
+          <div class="checkout-form-card">
+            <h3><i class="fa fa-truck w3-margin-right"></i>Delivery & Payment Details</h3>
+            <form id="checkoutForm" onsubmit="handlePlaceOrder(event)">
+              <div class="form-group">
+                <label for="studentName">Student Full Name</label>
+                <input type="text" id="studentName" required placeholder="e.g. Alex Wu">
+              </div>
+
+              <div class="form-group">
+                <label for="studentPhone">Contact Phone Number</label>
+                <input type="tel" id="studentPhone" required placeholder="e.g. 0912-345-678">
+              </div>
+
+              <!-- College Dorm Delivery Details -->
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="dormBuilding">Dormitory / Campus Building</label>
+                  <select id="dormBuilding" required>
+                    <option value="" disabled selected>Select your campus dorm</option>
+                    <option value="North Dorm Complex">North Dormitory Complex (Building A/B)</option>
+                    <option value="South Dorm Complex">South Dormitory Complex (Building C/D)</option>
+                    <option value="Ocean View Residence">Ocean View Student Residence</option>
+                    <option value="Campus Main Gate">Campus Main Gate Pick-up Point</option>
+                    <option value="University Library Plaza">University Library Plaza</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="roomNumber">Room / Unit #</label>
+                  <input type="text" id="roomNumber" required placeholder="e.g. Room 402">
+                </div>
+              </div>
+
+              <!-- Payment Method Selection -->
+              <div class="form-group">
+                <label>Payment Method</label>
+                <div class="payment-options">
+                  <label class="payment-label selected" onclick="selectPayment(this)">
+                    <input type="radio" name="paymentMethod" value="Cash on Delivery" checked>
+                    <i class="fa fa-money"></i>
+                    <span>Cash on Delivery</span>
+                  </label>
+                  <label class="payment-label" onclick="selectPayment(this)">
+                    <input type="radio" name="paymentMethod" value="Credit Card">
+                    <i class="fa fa-credit-card"></i>
+                    <span>Credit Card</span>
+                  </label>
+                  <label class="payment-label" onclick="selectPayment(this)">
+                    <input type="radio" name="paymentMethod" value="Mobile Payment">
+                    <i class="fa fa-mobile"></i>
+                    <span>Mobile Payment</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="orderNotes">Special Instructions (Optional)</label>
+                <textarea id="orderNotes" rows="2" placeholder="e.g. Leave at dorm front desk, call upon arrival"></textarea>
+              </div>
+
+              <button type="submit" class="place-order-btn">
+                <i class="fa fa-paper-plane"></i> Place Order
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-      <div class="w3-third w3-margin-bottom">
-        <div class="w3-card w3-padding w3-center w3-white">
-          <i class="fa fa-moon-o w3-jumbo w3-text-teal"></i>
-          <h4><b>Late Night Hours</b></h4>
-          <p>Open daily from 11:00 AM until 01:00 AM to keep your late-night study sessions fueled.</p>
+    </section>
+
+    <!-- 5. Footer Section -->
+    <footer id="contact" class="site-footer">
+      <div class="footer-contact">
+        <img src="images/contact.png" alt="Contact Us" class="footer-contact-img">
+        <span>1234-567-890</span>
+      </div>
+      <div class="footer-credit">
+        Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank" rel="noopener noreferrer">w3.css</a>
+      </div>
+    </footer>
+
+      </div> <!-- /.boxed-inner -->
+    </div> <!-- /.boxed-content -->
+
+  </main>
+
+  <!-- Detail Lightbox Modal -->
+  <div id="detailModalOverlay" class="modal-overlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeDetailModal()" aria-label="Close details">&times;</button>
+      <div class="modal-img-area">
+        <i id="modalIcon" class="fa fa-cutlery food-placeholder-icon" style="font-size:4.5rem;"></i>
+        <span class="food-placeholder-text">OceanBite Kitchen Spec</span>
+      </div>
+      <div class="modal-body">
+        <div class="modal-title-row">
+          <h3 id="modalTitle" class="modal-title">Item Title</h3>
+          <span id="modalPrice" class="modal-price">$0.00</span>
+        </div>
+        <span id="modalCategory" class="modal-category-badge">Category</span>
+        <p id="modalDesc" class="modal-desc">Detailed food description goes here.</p>
+
+        <div class="modal-actions-row">
+          <div class="qty-control">
+            <button type="button" class="qty-btn" onclick="adjustModalQty(-1)">&minus;</button>
+            <span id="modalQtyDisplay" class="qty-display">1</span>
+            <button type="button" class="qty-btn" onclick="adjustModalQty(1)">&plus;</button>
+          </div>
+          <button type="button" class="modal-add-btn" onclick="addCurrentModalToCart()">
+            <i class="fa fa-cart-plus"></i> Add to Cart
+          </button>
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- Interactive Quick Order Form -->
-  <section class="w3-container w3-padding-32 order-section" id="order">
-    <h2><b>Place Your Order</b></h2>
-    <p>Select your favorite meal and we will bring it to your campus dorm!</p>
-
-    <form class="w3-container w3-white w3-card w3-padding-24 w3-round" onsubmit="handleOrder(event)">
-      <div class="w3-section">
-        <label><b>Student Name</b></label>
-        <input class="w3-input w3-border" type="text" placeholder="e.g., Alex Chen" required>
-      </div>
-      <div class="w3-section">
-        <label><b>Dorm Building / Room Number</b></label>
-        <input class="w3-input w3-border" type="text" placeholder="e.g., Wuling Dorm Complex #402" required>
-      </div>
-      <div class="w3-section">
-        <label><b>Select Item</b></label>
-          <select id="orderItem" name="orderItem" class="w3-select w3-border" required>
-          <option value="" disabled selected>Choose a food item</option>
-          <option value="1">Deep Sea Ocean Bowl ($9.99)</option>
-          <option value="2">Atlantic Crispy Fish Burger ($7.49)</option>
-          <option value="3">Tidal Wave Garlic Fries ($4.29)</option>
-          <option value="4">Sailor Grilled Chicken Rice ($8.99)</option>
-          <option value="5">Blue Lagoon Sparkler ($3.50)</option>
-          <option value="6">Coral Reef Seafood Pasta ($11.49)</option>
-          <option value="7">Captain's Chicken Wings ($6.99)</option>
-          <option value="8">Ocean Mist Matcha Latte ($4.99)</option>
-          <option value="9">Island Veggie Wrap ($6.49)</option>
-          <option value="10">Sea Salt Chocolate Mousse ($3.99)</option>
-        </select>
-      </div>
-      <div class="w3-section">
-        <label><b>Special Instructions</b></label>
-        <input class="w3-input w3-border" type="text" placeholder="e.g., Extra spicy, leave at front desk">
-      </div>
-      <button type="submit" class="w3-button w3-teal w3-block w3-padding-large w3-margin-top">
-        <i class="fa fa-paper-plane w3-margin-right"></i> Submit Order
-      </button>
-    </form>
-  </section>
-
-  <!-- Footer -->
-  <footer class="w3-grid w3-padding-32 w3-dark-grey" style="grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:32px">
-    <div class="w3-container">
-      <h3><b>OceanBite</b></h3>
-      <p>Your premier virtual kitchen delivering delicious meals directly to college students.</p>
-    </div>
-
-    <div class="w3-container">
-      <h3><b>POPULAR ITEMS</b></h3>
-      <ul class="w3-ul w3-hoverable w3-text-light-grey">
-        <li class="w3-padding-16">Deep Sea Ocean Bowl</li>
-        <li class="w3-padding-16">Tidal Wave Garlic Fries</li>
-      </ul>
-    </div>
-
-    <div class="w3-container">
-      <h3><b>CATEGORIES</b></h3>
-      <p>
-        <span class="w3-tag w3-teal w3-margin-bottom">Bowls</span>
-        <span class="w3-tag w3-grey w3-small w3-margin-bottom">Burgers</span>
-        <span class="w3-tag w3-grey w3-small w3-margin-bottom">Drinks</span>
-        <span class="w3-tag w3-grey w3-small w3-margin-bottom">Fries</span>
-        <span class="w3-tag w3-grey w3-small w3-margin-bottom">Late Night</span>
-      </p>
-    </div>
-  </footer>
-
-  <!-- Mandatory Footer Requirement: Powered by w3.css -->
-  <div class="w3-black w3-center w3-padding-24">
-    Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-opacity">w3.css</a>
   </div>
 
-</main>
+  <!-- Floating Cart Button -->
+  <div id="floatingCartBtn" class="floating-cart-btn" onclick="toggleCartDrawer()">
+    <div class="cart-icon-wrapper">
+      <i class="fa fa-shopping-cart" style="font-size:1.35rem;"></i>
+      <span id="cartCountBadge" class="cart-count-badge">0</span>
+    </div>
+    <span id="cartBtnTotal" class="cart-btn-total">$0.00</span>
+  </div>
 
-<script>
-// Sidebar Toggle Logic
-const sidebar = document.getElementById("mySidebar");
-const overlay = document.getElementById("myOverlay");
-const mainContent = document.querySelector(".w3-main");
-const menuToggle = document.getElementById("menuToggle");
-let desktopMenuHidden = false;
+  <!-- Cart Slide-in Drawer -->
+  <div id="cartDrawerOverlay" class="cart-drawer-overlay" onclick="toggleCartDrawer()"></div>
+  <aside id="cartDrawer" class="cart-drawer">
+    <div class="cart-drawer-header">
+      <h3 class="cart-drawer-title"><i class="fa fa-shopping-basket"></i> Your Cart</h3>
+      <button class="cart-close-btn" onclick="toggleCartDrawer()" aria-label="Close cart">&times;</button>
+    </div>
+    <div id="cartItemsList" class="cart-items-list">
+      <!-- Items dynamically populated -->
+    </div>
+    <div class="cart-drawer-footer">
+      <div class="cart-subtotal-row">
+        <span>Total:</span>
+        <span id="cartDrawerSubtotal">$0.00</span>
+      </div>
+      <button class="checkout-btn" onclick="proceedToCheckoutFromCart()">
+        Proceed to Checkout <i class="fa fa-arrow-right"></i>
+      </button>
+    </div>
+  </aside>
 
-function w3_open() {
-  sidebar.classList.remove("menu-hidden");
-  sidebar.style.display = "block";
-  if (window.matchMedia("(max-width: 992px)").matches) {
-    overlay.style.display = "block";
-  } else {
-    desktopMenuHidden = false;
-    mainContent.style.marginLeft = "300px";
-  }
-  menuToggle.setAttribute("aria-expanded", "true");
-}
+  <!-- Order Success Animated Modal -->
+  <div id="orderSuccessOverlay" class="modal-overlay">
+    <div class="success-modal-card">
+      <div class="success-icon-wrap">
+        <i class="fa fa-check"></i>
+      </div>
+      <h2>Order Placed Successfully!</h2>
+      <p class="w3-text-grey">OceanBite is firing up the kitchen now.</p>
+      
+      <div class="success-details" id="successOrderDetails">
+        <!-- Order info dynamically populated -->
+      </div>
 
-function w3_close() {
-  if (window.matchMedia("(max-width: 992px)").matches) {
-    sidebar.classList.add("menu-hidden");
-    sidebar.style.display = "none";
-    overlay.style.display = "none";
-    menuToggle.setAttribute("aria-expanded", "false");
-  }
-}
+      <button class="success-close-btn" onclick="closeSuccessModal()">
+        Back to Menu
+      </button>
+    </div>
+  </div>
 
-function toggleMenu() {
-  if (window.matchMedia("(max-width: 992px)").matches) {
-    if (sidebar.style.display === "block") w3_close();
-    else w3_open();
-    return;
-  }
+  <!-- Main Application Script -->
+  <script>
+    // 10 Menu Items per 設計.md
+    const MENU_ITEMS = [
+      {
+        id: "squid-ink-pasta",
+        name: "Squid Ink Pasta",
+        category: "staples",
+        categoryLabel: "Staples",
+        price: 12.99,
+        icon: "fa-cutlery",
+        desc: "Rich authentic squid ink linguine tossed with calamari rings, garlic butter, sea salt, and extra virgin olive oil."
+      },
+      {
+        id: "clam-pasta",
+        name: "Clam Pasta",
+        category: "staples",
+        categoryLabel: "Staples",
+        price: 10.99,
+        icon: "fa-cutlery",
+        desc: "Fresh ocean clams simmered in white wine garlic broth over al dente spaghetti, finished with garden parsley."
+      },
+      {
+        id: "shrimp-pasta",
+        name: "Shrimp Pasta",
+        category: "staples",
+        categoryLabel: "Staples",
+        price: 11.49,
+        icon: "fa-cutlery",
+        desc: "Tender ocean shrimp pan-seared with cherry tomatoes and tossed in a creamy sun-dried tomato pesto pasta."
+      },
+      {
+        id: "salmon-risotto",
+        name: "Salmon Risotto",
+        category: "staples",
+        categoryLabel: "Staples",
+        price: 12.49,
+        icon: "fa-spoon",
+        desc: "Slow-cooked Italian arborio rice infused with savory herb broth and topped with a golden seared salmon fillet."
+      },
+      {
+        id: "octopus-risotto",
+        name: "Octopus Risotto",
+        category: "staples",
+        categoryLabel: "Staples",
+        price: 11.99,
+        icon: "fa-spoon",
+        desc: "Tender braised octopus tentacles folded into a creamy saffron risotto with parmesan and lemon zest."
+      },
+      {
+        id: "clam-risotto",
+        name: "Clam Risotto",
+        category: "staples",
+        categoryLabel: "Staples",
+        price: 10.49,
+        icon: "fa-spoon",
+        desc: "Velvety clam broth risotto cooked to perfection with sweet baby clams, melted butter, and fresh herbs."
+      },
+      {
+        id: "lobster-salad",
+        name: "Lobster Salad",
+        category: "drinks-snacks",
+        categoryLabel: "Drinks & Snacks",
+        price: 8.99,
+        icon: "fa-leaf",
+        desc: "Chunky succulent lobster meat tossed with crisp garden greens, creamy avocado slices, and honey citrus vinaigrette."
+      },
+      {
+        id: "crab-stick-salad",
+        name: "Crab Stick Salad",
+        category: "drinks-snacks",
+        categoryLabel: "Drinks & Snacks",
+        price: 6.99,
+        icon: "fa-leaf",
+        desc: "Shredded snow crab sticks paired with julienned cucumbers, sweet corn kernels, and fragrant roasted sesame dressing."
+      },
+      {
+        id: "seafood-chowder",
+        name: "Seafood Chowder",
+        category: "drinks-snacks",
+        categoryLabel: "Drinks & Snacks",
+        price: 5.49,
+        icon: "fa-coffee",
+        desc: "Hearty traditional Atlantic chowder loaded with tender clams, white fish fillets, diced potatoes, and cream."
+      },
+      {
+        id: "honey-lemon-water",
+        name: "Honey lemon water",
+        category: "drinks-snacks",
+        categoryLabel: "Drinks & Snacks",
+        price: 2.99,
+        icon: "fa-glass",
+        desc: "Cold freshly squeezed organic lemon juice lightly sweetened with wildflower honey and garnished with mint leaves."
+      }
+    ];
 
-  desktopMenuHidden = !desktopMenuHidden;
-  sidebar.classList.toggle("menu-hidden", desktopMenuHidden);
-  mainContent.classList.toggle("menu-collapsed", desktopMenuHidden);
-  sidebar.style.display = desktopMenuHidden ? "none" : "block";
-  mainContent.style.marginLeft = desktopMenuHidden ? "0" : "300px";
-  menuToggle.setAttribute("aria-expanded", String(!desktopMenuHidden));
-}
+    // State Variables
+    let currentCategory = "all";
+    let currentPage = 1;
+    const ITEMS_PER_PAGE = 6;
+    let cart = {}; // { itemId: quantity }
+    let activeModalItem = null;
+    let activeModalQty = 1;
 
-window.addEventListener("resize", () => {
-  if (window.matchMedia("(max-width: 992px)").matches) {
-    mainContent.style.marginLeft = "0";
-    sidebar.classList.add("menu-hidden");
-    sidebar.style.display = "none";
-    overlay.style.display = "none";
-    sidebar.classList.toggle("menu-hidden", desktopMenuHidden);
-    mainContent.classList.toggle("menu-collapsed", desktopMenuHidden);
-    menuToggle.setAttribute("aria-expanded", "false");
-  } else {
-    overlay.style.display = "none";
-    sidebar.style.display = desktopMenuHidden ? "none" : "block";
-    mainContent.style.marginLeft = desktopMenuHidden ? "0" : "300px";
-    menuToggle.setAttribute("aria-expanded", String(!desktopMenuHidden));
-  }
-});
+    // DOM Elements
+    const foodGrid = document.getElementById("foodGrid");
+    const pagination = document.getElementById("pagination");
+    const filterBtns = document.querySelectorAll(".filter-btn");
+    const sidebar = document.getElementById("mySidebar");
+    const overlay = document.getElementById("myOverlay");
+    const cartDrawer = document.getElementById("cartDrawer");
+    const cartDrawerOverlay = document.getElementById("cartDrawerOverlay");
+    const cartCountBadge = document.getElementById("cartCountBadge");
+    const cartBtnTotal = document.getElementById("cartBtnTotal");
+    const floatingCartBtn = document.getElementById("floatingCartBtn");
 
-// Pagination Logic (Limit 6 items per page)
-let currentPage = 1;
-const itemsPerPage = 6;
-const foodItems = Array.from(document.querySelectorAll('.food-item'));
+    // Initialize Page
+    document.addEventListener("DOMContentLoaded", () => {
+      initHeroObserver();
+      renderMenu();
+      updateCartUI();
+    });
 
-function renderPagination() {
-  const visibleItems = foodItems.filter(item => item.dataset.filtered !== 'false');
-  const totalPages = Math.ceil(visibleItems.length / itemsPerPage);
-  currentPage = Math.min(Math.max(currentPage, 1), Math.max(totalPages, 1));
+    // Auto-hide sidebar on Hero, show & fix on Menu/Checkout
+    function initHeroObserver() {
+      const heroSection = document.getElementById("home");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            document.body.classList.add("on-hero");
+            if (window.innerWidth <= 992) {
+              w3_close();
+            }
+          } else {
+            document.body.classList.remove("on-hero");
+          }
+        });
+      }, { threshold: 0.25 });
 
-  const startIdx = (currentPage - 1) * itemsPerPage;
-  const pageItems = new Set(visibleItems.slice(startIdx, startIdx + itemsPerPage));
-  foodItems.forEach(item => {
-    const shouldShow = pageItems.has(item);
-    item.style.display = shouldShow ? "block" : "none";
-    item.classList.remove("food-card-enter");
-    if (shouldShow) {
-      void item.offsetWidth;
-      item.classList.add("food-card-enter");
+      observer.observe(heroSection);
     }
-  });
 
-  // Keep the page buttons accurate after category filtering.
-  const pagination = document.getElementById('pagination');
-  pagination.replaceChildren();
-  if (totalPages <= 1) return;
-
-  const previous = document.createElement('button');
-  previous.type = 'button';
-  previous.className = 'w3-bar-item w3-button w3-hover-teal';
-  previous.textContent = '«';
-  previous.setAttribute('aria-label', 'Previous page');
-  previous.disabled = currentPage === 1;
-  previous.onclick = () => changePage(-1);
-  pagination.append(previous);
-
-  for (let page = 1; page <= totalPages; page++) {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = `w3-bar-item w3-button ${page === currentPage ? 'w3-teal' : 'w3-hover-teal'}`;
-    button.textContent = String(page);
-    button.setAttribute('aria-label', `Page ${page}`);
-    if (page === currentPage) button.setAttribute('aria-current', 'page');
-    button.onclick = () => goToPage(page);
-    pagination.append(button);
-  }
-
-  const next = document.createElement('button');
-  next.type = 'button';
-  next.className = 'w3-bar-item w3-button w3-hover-teal';
-  next.textContent = '»';
-  next.setAttribute('aria-label', 'Next page');
-  next.disabled = currentPage === totalPages;
-  next.onclick = () => changePage(1);
-  pagination.append(next);
-}
-
-function changePage(direction) {
-  const totalPages = Math.ceil(foodItems.filter(item => item.dataset.filtered !== 'false').length / itemsPerPage);
-  currentPage += direction;
-  if (currentPage < 1) currentPage = 1;
-  if (currentPage > totalPages) currentPage = totalPages;
-  renderPagination();
-}
-
-function goToPage(pageNum) {
-  currentPage = pageNum;
-  renderPagination();
-}
-
-// Filtering Logic
-function filterFood(category) {
-  if (!['all', 'main', 'snack', 'drink'].includes(category)) return;
-  foodItems.forEach(item => {
-    if (category === 'all' || item.dataset.category === category) {
-      item.dataset.filtered = 'true';
-    } else {
-      item.dataset.filtered = 'false';
+    // Sidebar functions (reference example.html)
+    function w3_open() {
+      sidebar.style.display = "block";
+      overlay.style.display = "block";
     }
-  });
-  document.querySelectorAll('.filter-btn').forEach(button => {
-    const active = button.dataset.category === category;
-    button.classList.toggle('w3-black', active);
-    button.classList.toggle('w3-white', !active);
-    button.setAttribute('aria-pressed', String(active));
-  });
-  currentPage = 1;
-  renderPagination();
-}
 
-document.querySelectorAll('.filter-btn').forEach(button => {
-  button.addEventListener('click', () => {
-    filterFood(button.dataset.category);
-    button.classList.remove('filter-clicked');
-    void button.offsetWidth;
-    button.classList.add('filter-clicked');
-  });
-});
+    function w3_close() {
+      sidebar.style.display = "none";
+      overlay.style.display = "none";
+    }
 
-// Initial Render
-renderPagination();
+    // 2. Menu Filtering & Pagination
+    filterBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        filterBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentCategory = btn.dataset.category;
+        currentPage = 1;
+        renderMenu();
+      });
+    });
 
-// Interactive Form Handler
-function handleOrder(e) {
-  e.preventDefault();
-  alert("Thank you for your order! OceanBite is preparing your food.");
-}
-</script>
+    function getFilteredItems() {
+      if (currentCategory === "all") return MENU_ITEMS;
+      return MENU_ITEMS.filter(item => item.category === currentCategory);
+    }
+
+    function renderMenu() {
+      const items = getFilteredItems();
+      const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
+      if (currentPage > totalPages) currentPage = totalPages;
+
+      const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+      const displayItems = items.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+      // Render Cards
+      foodGrid.innerHTML = displayItems.map(item => `
+        <article class="food-card" onclick="openDetailModal('${item.id}')">
+          <div class="food-img-container">
+            <i class="fa ${item.icon} food-placeholder-icon"></i>
+            <span class="food-placeholder-text">Photo Placeholder</span>
+          </div>
+          <div class="food-card-body">
+            <div class="food-header">
+              <h3 class="food-title">${item.name}</h3>
+              <span class="food-price">$${item.price.toFixed(2)}</span>
+            </div>
+            <p class="food-desc">${item.desc}</p>
+            <div class="food-action">
+              <span class="view-detail-hint"><i class="fa fa-info-circle"></i> Click to customize</span>
+              <button type="button" class="quick-add-btn" onclick="event.stopPropagation(); quickAddToCart('${item.id}')" title="Quick Add">
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+
+      // Render Pagination Buttons
+      if (totalPages <= 1) {
+        pagination.innerHTML = "";
+      } else {
+        let pagHtml = `<button type="button" class="page-btn" onclick="changePage(-1)" ${currentPage === 1 ? 'disabled' : ''}>&laquo;</button>`;
+        for (let i = 1; i <= totalPages; i++) {
+          pagHtml += `<button type="button" class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+        }
+        pagHtml += `<button type="button" class="page-btn" onclick="changePage(1)" ${currentPage === totalPages ? 'disabled' : ''}>&raquo;</button>`;
+        pagination.innerHTML = pagHtml;
+      }
+    }
+
+    function changePage(direction) {
+      currentPage += direction;
+      renderMenu();
+      document.getElementById("menu").scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      renderMenu();
+      document.getElementById("menu").scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 3. Detail Lightbox Modal
+    function openDetailModal(itemId) {
+      const item = MENU_ITEMS.find(m => m.id === itemId);
+      if (!item) return;
+
+      activeModalItem = item;
+      activeModalQty = 1;
+
+      document.getElementById("modalTitle").textContent = item.name;
+      document.getElementById("modalPrice").textContent = `$${item.price.toFixed(2)}`;
+      document.getElementById("modalCategory").textContent = item.categoryLabel;
+      document.getElementById("modalDesc").textContent = item.desc;
+      document.getElementById("modalIcon").className = `fa ${item.icon} food-placeholder-icon`;
+      document.getElementById("modalQtyDisplay").textContent = activeModalQty;
+
+      document.getElementById("detailModalOverlay").classList.add("open");
+    }
+
+    function closeDetailModal() {
+      document.getElementById("detailModalOverlay").classList.remove("open");
+      activeModalItem = null;
+    }
+
+    function closeModalOnOverlay(e) {
+      if (e.target.id === "detailModalOverlay") {
+        closeDetailModal();
+      }
+    }
+
+    function adjustModalQty(delta) {
+      activeModalQty = Math.max(1, activeModalQty + delta);
+      document.getElementById("modalQtyDisplay").textContent = activeModalQty;
+    }
+
+    function addCurrentModalToCart() {
+      if (!activeModalItem) return;
+      addToCart(activeModalItem.id, activeModalQty);
+      closeDetailModal();
+    }
+
+    function quickAddToCart(itemId) {
+      addToCart(itemId, 1);
+    }
+
+    // 4. Cart Operations & Slide-in Drawer
+    function addToCart(itemId, quantity = 1) {
+      cart[itemId] = (cart[itemId] || 0) + quantity;
+      updateCartUI();
+      bumpCartBtn();
+    }
+
+    function changeCartItemQty(itemId, delta) {
+      if (!cart[itemId]) return;
+      cart[itemId] += delta;
+      if (cart[itemId] <= 0) {
+        delete cart[itemId];
+      }
+      updateCartUI();
+    }
+
+    function bumpCartBtn() {
+      floatingCartBtn.classList.remove("bump");
+      void floatingCartBtn.offsetWidth; // trigger reflow
+      floatingCartBtn.classList.add("bump");
+    }
+
+    function toggleCartDrawer() {
+      const isOpen = cartDrawer.classList.contains("open");
+      cartDrawer.classList.toggle("open", !isOpen);
+      cartDrawerOverlay.classList.toggle("open", !isOpen);
+    }
+
+    function updateCartUI() {
+      let totalCount = 0;
+      let totalAmount = 0;
+      const cartItemsList = document.getElementById("cartItemsList");
+      const checkoutSummaryList = document.getElementById("checkoutSummaryList");
+
+      let itemsHtml = "";
+      let summaryHtml = "";
+
+      const itemIds = Object.keys(cart);
+
+      if (itemIds.length === 0) {
+        itemsHtml = `
+          <div class="cart-empty-message">
+            <i class="fa fa-shopping-basket cart-empty-icon"></i>
+            <p>Your cart is empty.</p>
+            <span class="w3-small">Add delicious dorm meals to begin!</span>
+          </div>
+        `;
+        summaryHtml = `<div class="w3-text-grey w3-center w3-padding-16">No items selected yet. Choose your favorite meals from the menu above!</div>`;
+      } else {
+        itemIds.forEach(id => {
+          const item = MENU_ITEMS.find(m => m.id === id);
+          if (!item) return;
+
+          const qty = cart[id];
+          const subtotal = item.price * qty;
+          totalCount += qty;
+          totalAmount += subtotal;
+
+          itemsHtml += `
+            <div class="cart-item">
+              <div class="cart-item-info">
+                <h4 class="cart-item-title">${item.name}</h4>
+                <span class="cart-item-price">$${item.price.toFixed(2)} &times; ${qty} = $${subtotal.toFixed(2)}</span>
+              </div>
+              <div class="cart-item-controls">
+                <button type="button" class="cart-qty-btn" onclick="changeCartItemQty('${id}', -1)">&minus;</button>
+                <span class="cart-qty-num">${qty}</span>
+                <button type="button" class="cart-qty-btn" onclick="changeCartItemQty('${id}', 1)">&plus;</button>
+              </div>
+            </div>
+          `;
+
+          summaryHtml += `
+            <div class="summary-item-row">
+              <div>
+                <b>${item.name}</b> <span class="w3-text-grey">&times; ${qty}</span>
+              </div>
+              <span>$${subtotal.toFixed(2)}</span>
+            </div>
+          `;
+        });
+      }
+
+      cartItemsList.innerHTML = itemsHtml;
+      checkoutSummaryList.innerHTML = summaryHtml;
+
+      cartCountBadge.textContent = totalCount;
+      cartBtnTotal.textContent = `$${totalAmount.toFixed(2)}`;
+      document.getElementById("cartDrawerSubtotal").textContent = `$${totalAmount.toFixed(2)}`;
+      document.getElementById("checkoutSubtotal").textContent = `$${totalAmount.toFixed(2)}`;
+      document.getElementById("checkoutGrandTotal").textContent = `$${totalAmount.toFixed(2)}`;
+    }
+
+    function proceedToCheckoutFromCart() {
+      toggleCartDrawer();
+      document.getElementById("checkout").scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 5. Checkout & Payment Selection
+    function selectPayment(element) {
+      document.querySelectorAll(".payment-label").forEach(l => l.classList.remove("selected"));
+      element.classList.add("selected");
+      element.querySelector('input[type="radio"]').checked = true;
+    }
+
+    function handlePlaceOrder(event) {
+      event.preventDefault();
+
+      const itemIds = Object.keys(cart);
+      if (itemIds.length === 0) {
+        alert("Your cart is empty! Please choose items from the menu before placing an order.");
+        document.getElementById("menu").scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      const studentName = document.getElementById("studentName").value.trim();
+      const studentPhone = document.getElementById("studentPhone").value.trim();
+      const dormBuilding = document.getElementById("dormBuilding").value;
+      const roomNumber = document.getElementById("roomNumber").value.trim();
+      const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+      const grandTotal = document.getElementById("checkoutGrandTotal").textContent;
+
+      const orderNumber = "OB-" + Math.floor(100000 + Math.random() * 900000);
+
+      document.getElementById("successOrderDetails").innerHTML = `
+        <div><b>Order Number:</b> ${orderNumber}</div>
+        <div><b>Customer:</b> ${studentName} (${studentPhone})</div>
+        <div><b>Campus Delivery To:</b> ${dormBuilding}, Room ${roomNumber}</div>
+        <div><b>Payment:</b> ${paymentMethod} (${grandTotal})</div>
+        <div><b>Estimated Delivery Time:</b> 20 - 30 mins</div>
+      `;
+
+      document.getElementById("orderSuccessOverlay").classList.add("open");
+
+      // Reset cart and form
+      cart = {};
+      updateCartUI();
+      document.getElementById("checkoutForm").reset();
+      selectPayment(document.querySelector('.payment-label'));
+    }
+
+    function closeSuccessModal() {
+      document.getElementById("orderSuccessOverlay").classList.remove("open");
+      document.getElementById("menu").scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
 
 </body>
 </html>
