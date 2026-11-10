@@ -19,10 +19,8 @@
 
   <!-- Sidebar/menu (Reference example.html: w3-sidebar w3-collapse w3-white w3-animate-left) -->
   <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" id="mySidebar">
-    <div class="w3-container w3-padding-24" style="background-color: var(--ocean-deep); color: white;">
+    <div class="w3-container w3-hide-large">
       <button data-action="menu-close" class="w3-button w3-hide-large w3-right w3-large" aria-label="Close menu">&times;</button>
-      <h3 class="w3-margin-0"><b>OceanBite</b></h3>
-      <p class="w3-small w3-text-light-grey w3-margin-0">Virtual Kitchen for Campus</p>
     </div>
     
     <div class="w3-bar-block w3-padding-16">
@@ -32,7 +30,7 @@
       <a href="#menu" data-action="menu-close" class="w3-bar-item w3-button nav-link">
         <i class="fa fa-cutlery fa-fw w3-margin-right"></i>MENU
       </a>
-      <a href="#checkout" data-action="menu-close" class="w3-bar-item w3-button nav-link">
+      <a href="#checkoutHeader" data-action="menu-close" class="w3-bar-item w3-button nav-link">
         <i class="fa fa-credit-card fa-fw w3-margin-right"></i>CHECKOUT
       </a>
       <a href="#contact" data-action="menu-close" class="w3-bar-item w3-button nav-link">
@@ -90,7 +88,7 @@
     <!-- 3. Checkout Page Section (Evening Tone Transition) -->
     <section id="checkout" class="checkout-section">
       <div class="checkout-container">
-        <div class="checkout-header">
+        <div class="checkout-header" id="checkoutHeader">
           <h2 class="checkout-title">Express Checkout</h2>
           <p class="checkout-subtitle">Zero delivery fee on campus. Hot & fresh delivered straight to your dorm building.</p>
         </div>

@@ -24,6 +24,10 @@ body, h1, h2, h3, h4, h5, h6 {
   font-family: "Raleway", sans-serif;
 }
 
+body.on-hero #floatingCartBtn {
+  display: none;
+}
+
 /* Boxed Container for Menu, Checkout & Footer (1600px centered on wide screens) */
 .boxed-content {
   max-width: 1600px;
@@ -138,7 +142,7 @@ body, h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  border-radius: 50px;
+  border-radius: 0;
   text-decoration: none;
   box-shadow: 0 8px 24px rgba(231, 111, 81, 0.45);
   transition: all 0.35s ease;
@@ -168,12 +172,15 @@ body, h1, h2, h3, h4, h5, h6 {
    ========================================================================== */
 #mySidebar {
   position: fixed;
-  top: 0;
-  height: 100vh;
+  top: 32px;
+  height: auto;
+  max-height: calc(100vh - 48px);
   z-index: 100;
   width: 280px;
+  border-radius: 16px;
   border-right: 2px solid rgba(224, 247, 250, 0.6);
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
   overflow-y: auto;
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
@@ -209,6 +216,10 @@ body, h1, h2, h3, h4, h5, h6 {
 }
 
 @media (min-width: 993px) {
+  .hero-bottom-gradient {
+    height: 140px;
+  }
+
   /* On Hero: sidebar is hidden so hero image fills 100vw */
   body.on-hero #mySidebar {
     transform: translateX(-100%) !important;
@@ -237,6 +248,7 @@ body, h1, h2, h3, h4, h5, h6 {
 @media (max-width: 992px) {
   #mySidebar {
     left: 0 !important;
+    margin-left: 16px;
   }
   .boxed-inner {
     margin-left: 0 !important;
@@ -246,7 +258,7 @@ body, h1, h2, h3, h4, h5, h6 {
 .nav-link {
   font-weight: 600;
   letter-spacing: 1px;
-  padding: 14px 20px !important;
+  padding: 10px 20px !important;
   transition: all 0.25s ease;
   display: flex;
   align-items: center;
@@ -344,7 +356,7 @@ body, h1, h2, h3, h4, h5, h6 {
 /* Food Card */
 .food-card {
   background: #ffffff;
-  border-radius: 14px;
+  border-radius: 0;
   overflow: hidden;
   box-shadow: 0 6px 20px rgba(80, 50, 40, 0.08);
   display: flex;
@@ -562,7 +574,7 @@ body, h1, h2, h3, h4, h5, h6 {
 
   .food-card {
     height: 100%;
-    border-radius: 12px;
+    border-radius: 0;
     display: flex;
     flex-direction: column;
   }
@@ -1075,9 +1087,9 @@ body, h1, h2, h3, h4, h5, h6 {
    Checkout Page (Evening Tone Transition)
    ========================================================================== */
 .checkout-section {
-  --section-background: linear-gradient(180deg, #ecd2c1 0%, var(--evening-bg-start) 25%, var(--evening-bg-end) 100%);
+  --section-background: linear-gradient(180deg, #ecd2c1 0, var(--evening-bg-start) 220px, var(--evening-bg-end) 280px, var(--evening-bg-end) 100%);
   background: var(--section-background);
-  padding: 80px 32px;
+  padding: 280px 32px 80px;
   color: #ffffff;
   min-height: 100vh;
 }
@@ -1121,7 +1133,7 @@ body, h1, h2, h3, h4, h5, h6 {
 .summary-card {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 16px;
+  border-radius: 0;
   padding: 24px;
   backdrop-filter: blur(10px);
 }
@@ -1177,7 +1189,7 @@ body, h1, h2, h3, h4, h5, h6 {
 /* Checkout Form */
 .checkout-form-card {
   background: #ffffff;
-  border-radius: 16px;
+  border-radius: 0;
   padding: 32px;
   color: #2b1f1a;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
@@ -1400,8 +1412,8 @@ body, h1, h2, h3, h4, h5, h6 {
     content: "";
     position: absolute;
     z-index: -1;
-    top: 0;
-    bottom: 0;
+    top: -1px;
+    bottom: -1px;
     left: min(-280px, calc((1600px - 100vw) / 2 - 280px));
     width: 100vw;
     background: var(--section-background);

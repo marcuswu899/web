@@ -394,7 +394,7 @@
 
     function proceedToCheckoutFromCart() {
       toggleCartDrawer();
-      document.getElementById("checkout").scrollIntoView({ behavior: 'smooth' });
+      document.getElementById("checkoutHeader").scrollIntoView({ behavior: 'smooth' });
     }
 
     // 5. Checkout & Payment Selection
