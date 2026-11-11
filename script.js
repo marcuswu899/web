@@ -129,6 +129,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       initHeroObserver();
       initVolleyballCursor();
+      initCrabSpawning();
       initTopSellingAnimations();
       syncMusicToggle();
       renderMenu();

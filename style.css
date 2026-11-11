@@ -744,6 +744,8 @@ body, h1, h2, h3, h4, h5, h6 {
     --crab-size: clamp(76px, 8vw, 110px);
     --crab-start: 336px;
     --crab-end: calc(100vw - var(--crab-size) - 24px);
+  }
+
   .top-selling-section {
     width: calc(100% + 20px);
     margin-left: -20px;
