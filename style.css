@@ -749,6 +749,20 @@ body, h1, h2, h3, h4, h5, h6 {
   .top-selling-section {
     width: calc(100% + 20px);
     margin-left: -20px;
+    position: relative;
+    isolation: isolate;
+    background: transparent;
+  }
+
+  .top-selling-section::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    bottom: 0;
+    left: min(-300px, calc((1600px - 100vw) / 2 - 300px));
+    width: 100vw;
+    background: linear-gradient(145deg, #07354c, #061f33 72%);
   }
 
   .menu-section {
