@@ -436,8 +436,7 @@
       foodGrid.innerHTML = displayItems.map(item => `
         <article class="food-card" data-item-id="${item.id}">
           <div class="food-img-container">
-            <i class="fa ${item.icon} food-placeholder-icon"></i>
-            <span class="food-placeholder-text">Photo Placeholder</span>
+            <img class="food-image" src="images/meals/${item.name}.jpg" alt="${item.name}" loading="lazy" decoding="async">
           </div>
           <div class="food-card-body">
             <div class="food-header">

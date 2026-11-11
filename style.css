@@ -325,18 +325,21 @@ body, h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 14px 28px rgba(15, 76, 129, 0.2);
 }
 
-/* Food Image / Placeholder Area */
+/* Food Image Area */
 .food-img-container {
-  height: 200px;
+  height: 180px;
   width: 100%;
   background: linear-gradient(135deg, #e5efff 0%, #c6dcff 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   position: relative;
   overflow: hidden;
   border-bottom: 1px solid #c6dcff;
+}
+
+.food-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .food-placeholder-icon {
@@ -535,8 +538,9 @@ body, h1, h2, h3, h4, h5, h6 {
   }
 
   .food-img-container {
-    height: 75px;
-    min-height: 75px;
+    height: auto;
+    min-height: 0;
+    flex: 2;
   }
 
   .food-placeholder-icon {
@@ -552,6 +556,7 @@ body, h1, h2, h3, h4, h5, h6 {
   .food-card-body {
     padding: 8px 14px 8px;
     flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
