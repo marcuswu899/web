@@ -120,7 +120,6 @@
 
     // Initialize Page
     document.addEventListener("DOMContentLoaded", () => {
-      initHeroObserver();
       initVolleyballCursor();
       startBackgroundMusic();
       renderMenu();
@@ -345,25 +344,6 @@
         }
       });
       window.setTimeout(() => { layer.innerHTML = ""; }, 1900);
-    }
-
-    // Auto-hide sidebar on Hero, show & fix on Menu/Checkout
-    function initHeroObserver() {
-      const heroSection = document.getElementById("home");
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            document.body.classList.add("on-hero");
-            if (window.innerWidth <= 992) {
-              w3_close();
-            }
-          } else {
-            document.body.classList.remove("on-hero");
-          }
-        });
-      }, { threshold: 0.25 });
-
-      observer.observe(heroSection);
     }
 
     // Sidebar functions (reference example.html)

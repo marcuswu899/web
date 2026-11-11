@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 200" fill="none">
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <!-- Sea grass on the left -->
+    <g stroke="#53C9B0" stroke-width="6">
+      <path d="M77 174C83 145 79 113 65 83M81 145C98 132 105 116 103 98M75 125C61 114 55 99 57 88"/>
+      <path d="M134 174C128 143 136 110 153 78M132 144C115 132 109 117 111 102M139 123C155 110 162 95 160 84"/>
+      <path d="M185 174C181 151 185 133 194 117"/>
+    </g>
+    <g fill="#8DE0CE" stroke="#53C9B0" stroke-width="4">
+      <path d="M64 84C47 74 45 59 52 51C67 58 73 70 64 84Z"/>
+      <path d="M104 99C102 82 111 71 121 72C124 86 117 96 104 99Z"/>
+      <path d="M57 89C43 79 42 66 49 59C62 66 66 78 57 89Z"/>
+      <path d="M153 79C153 62 164 53 174 57C174 71 166 79 153 79Z"/>
+      <path d="M111 103C102 89 105 76 114 72C124 83 123 95 111 103Z"/>
+      <path d="M160 85C175 74 177 61 170 54C157 62 152 75 160 85Z"/>
+    </g>
+
+    <!-- Sea grass on the right -->
+    <g stroke="#53C9B0" stroke-width="6">
+      <path d="M895 174C901 145 897 113 883 83M899 145C916 132 923 116 921 98M893 125C879 114 873 99 875 88"/>
+      <path d="M952 174C946 143 954 110 971 78M950 144C933 132 927 117 929 102M957 123C973 110 980 95 978 84"/>
+      <path d="M1003 174C999 151 1003 133 1012 117"/>
+    </g>
+    <g fill="#8DE0CE" stroke="#53C9B0" stroke-width="4">
+      <path d="M882 84C865 74 863 59 870 51C885 58 891 70 882 84Z"/>
+      <path d="M922 99C920 82 929 71 939 72C942 86 935 96 922 99Z"/>
+      <path d="M875 89C861 79 860 66 867 59C880 66 884 78 875 89Z"/>
+      <path d="M971 79C971 62 982 53 992 57C992 71 984 79 971 79Z"/>
+      <path d="M929 103C920 89 923 76 932 72C942 83 941 95 929 103Z"/>
+      <path d="M978 85C993 74 995 61 988 54C975 62 970 75 978 85Z"/>
+    </g>
+
+    <!-- Small fish -->
+    <g stroke="#55BDE0" stroke-width="5" fill="#A7E4F3">
+      <path d="M274 99C290 83 316 83 333 99C316 115 290 115 274 99Z"/>
+      <path d="M274 99L260 87V111L274 99Z"/>
+      <circle cx="316" cy="96" r="2.5" fill="#278DAF" stroke="none"/>
+      <path d="M806 121C820 107 843 107 858 121C843 135 820 135 806 121Z"/>
+      <path d="M806 121L793 110V132L806 121Z"/>
+      <circle cx="843" cy="118" r="2.5" fill="#278DAF" stroke="none"/>
+    </g>
+    <g stroke="#73CDE8" stroke-width="4" fill="#C9F0F8">
+      <path d="M367 57C377 48 391 48 400 57C391 66 377 66 367 57Z"/>
+      <path d="M367 57L358 50V64L367 57Z"/>
+      <circle cx="391" cy="55" r="1.8" fill="#278DAF" stroke="none"/>
+      <path d="M690 79C700 70 714 70 723 79C714 88 700 88 690 79Z"/>
+      <path d="M690 79L681 72V86L690 79Z"/>
+      <circle cx="714" cy="77" r="1.8" fill="#278DAF" stroke="none"/>
+    </g>
+
+    <!-- Bubbles -->
+    <g stroke="#84D5EA" stroke-width="4" fill="#D8F5FA">
+      <circle cx="235" cy="48" r="9"/>
+      <circle cx="245" cy="72" r="5"/>
+      <circle cx="341" cy="145" r="7"/>
+      <circle cx="751" cy="48" r="8"/>
+      <circle cx="770" cy="65" r="4.5"/>
+      <circle cx="864" cy="71" r="6"/>
+    </g>
+    <circle cx="426" cy="48" r="4" fill="#A7E4F3"/>
+    <circle cx="659" cy="143" r="5" fill="#A7E4F3"/>
+
+    <!-- Octopus arms, behind the head -->
+    <g fill="#F47C58" stroke="#D95742" stroke-width="5">
+      <path d="M490 116C466 124 447 122 440 108C435 98 443 88 452 91C458 93 460 99 457 104C466 111 478 108 491 102Z"/>
+      <path d="M493 127C470 142 449 151 438 140C429 132 433 120 442 119C449 118 453 124 450 130C461 135 475 126 489 116Z"/>
+      <path d="M511 132C498 152 490 170 500 177C509 183 520 175 517 167C515 162 510 161 506 164C502 157 510 145 520 134Z"/>
+      <path d="M569 132C582 152 590 170 580 177C571 183 560 175 563 167C565 162 570 161 574 164C578 157 570 145 560 134Z"/>
+      <path d="M587 127C610 142 631 151 642 140C651 132 647 120 638 119C631 118 627 124 630 130C619 135 605 126 591 116Z"/>
+      <path d="M590 116C614 124 633 122 640 108C645 98 637 88 628 91C622 93 620 99 623 104C614 111 602 108 589 102Z"/>
+    </g>
+
+    <!-- Octopus head -->
+    <path d="M478 111C472 100 470 89 473 77C479 51 505 36 540 36C575 36 601 51 607 77C610 89 608 100 602 111C589 127 570 135 540 135C510 135 491 127 478 111Z" fill="#F47C58" stroke="#D95742" stroke-width="5"/>
+    <path d="M492 73C500 57 516 49 533 48" stroke="#FFAA84" stroke-width="5"/>
+    <g fill="#713F3A" stroke="none">
+      <ellipse cx="519" cy="91" rx="5" ry="7"/>
+      <ellipse cx="561" cy="91" rx="5" ry="7"/>
+    </g>
+    <path d="M526 105C530 112 536 115 541 115C547 115 552 112 555 105" stroke="#713F3A" stroke-width="4"/>
+    <circle cx="504" cy="101" r="6" fill="#FFB09A" opacity=".85"/>
+    <circle cx="576" cy="101" r="6" fill="#FFB09A" opacity=".85"/>
+
+    <!-- Tiny arm details -->
+    <g fill="#FFD1B9" stroke="none">
+      <circle cx="447" cy="102" r="3"/><circle cx="441" cy="131" r="3"/>
+      <circle cx="506" cy="171" r="3"/><circle cx="574" cy="171" r="3"/>
+      <circle cx="639" cy="131" r="3"/><circle cx="633" cy="102" r="3"/>
+    </g>
+  </g>
+</svg>

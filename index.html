@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="on-hero">
+<body>
 
   <!-- Mobile Menu Toggle Button (Only appears on small screens / w3-hide-large) -->
   <button id="menuToggleBtn" class="w3-hide-large" data-action="menu-open" aria-label="Open Navigation Menu">
@@ -21,9 +21,6 @@
   <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" id="mySidebar">
     <button data-action="menu-close" class="w3-button w3-hide-large w3-right w3-large sidebar-close-btn" aria-label="Close menu">&times;</button>
     <div class="w3-bar-block w3-padding-16">
-      <a href="#home" data-action="menu-close" class="w3-bar-item w3-button nav-link">
-        <i class="fa fa-home fa-fw w3-margin-right"></i>HOME
-      </a>
       <a href="#menu" data-action="menu-close" class="w3-bar-item w3-button nav-link">
         <i class="fa fa-cutlery fa-fw w3-margin-right"></i>MENU
       </a>
@@ -47,20 +44,6 @@
 
   <!-- Main Content Wrapper -->
   <main class="w3-main">
-
-    <!-- 1. Hero Landing Page Section (100vw Full Bleed Background) -->
-    <section id="home" class="hero-section">
-      <img src="images/home.png" alt="OceanBite Campus Virtual Kitchen" class="hero-bg">
-      <div class="hero-overlay"></div>
-      <div class="hero-bottom-gradient"></div>
-      <div class="hero-content">
-        <h1 class="hero-title">OceanBite Virtual Kitchen</h1>
-        <p class="hero-subtitle">Pause the Books, Taste the Ocean.</p>
-        <a href="#menu" class="start-order-btn">
-          <i class="fa fa-arrow-down w3-margin-right"></i>Start Order
-        </a>
-      </div>
-    </section>
 
     <!-- Boxed Content (1600px Max-Width Centered with margins on wide screens) -->
     <div class="boxed-content">
@@ -97,24 +80,7 @@
         </div>
 
         <div class="checkout-sea-life" aria-hidden="true">
-          <svg viewBox="0 0 520 96" focusable="false">
-            <g fill="none" stroke="#69c9c3" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M58 92c-4-19 2-36 0-56m0 36C43 61 39 48 40 36m19 25c11-12 15-25 13-39M87 92c3-15-2-28 4-44m-4 27c-11-7-16-17-16-27m16 17c8-8 11-17 10-27" stroke-width="5"/>
-              <path d="M432 92c4-19-2-36 0-56m0 36c15-11 19-24 18-36m-19 25c-11-12-15-25-13-39m-15 70c-3-15 2-28-4-44m4 27c11-7 16-17 16-27m-16 17c-8-8-11-17-10-27" stroke-width="5"/>
-            </g>
-            <g fill="none" stroke="#f4a261" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
-              <path d="M219 56c-13-14-26-13-32-4-5 8 2 16 12 18m102-14c13-14 26-13 32-4 5 8-2 16-12 18M215 54l-13-13m18 12-5-18m105 19 13-13m-18 12 5-18"/>
-              <path d="M236 48c0-12 11-20 24-20s24 8 24 20v13c0 13-11 21-24 21s-24-8-24-21z" fill="#e76f51"/>
-              <path d="M244 79l-10 10m22-7v10m22-13 10 10"/>
-              <path d="M247 35v-7m26 7v-7"/>
-              <circle cx="247" cy="48" r="2.5" fill="#18384a" stroke="none"/>
-              <circle cx="273" cy="48" r="2.5" fill="#18384a" stroke="none"/>
-              <path d="M254 57q7 6 14 0" stroke="#18384a" stroke-width="2.5"/>
-            </g>
-            <g fill="#90e0ef" opacity=".9">
-              <circle cx="151" cy="59" r="3"/><circle cx="165" cy="38" r="2"/><circle cx="359" cy="45" r="3"/><circle cx="371" cy="68" r="2"/>
-            </g>
-          </svg>
+          <img src="images/checkout-octopus.svg" alt="" />
         </div>
 
         <div class="checkout-grid">
@@ -142,7 +108,7 @@
 
           <!-- Checkout Details Form Card -->
           <div class="checkout-form-card">
-            <h3><i class="fa fa-truck w3-margin-right"></i>Delivery & Payment Details</h3>
+            <h3><img src="images/submarine.png" class="checkout-heading-icon w3-margin-right" alt="" aria-hidden="true">Delivery & Payment Details</h3>
             <form id="checkoutForm">
               <div class="form-group">
                 <label for="studentName">Student Full Name</label>
