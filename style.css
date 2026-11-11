@@ -594,81 +594,6 @@ body, h1, h2, h3, h4, h5, h6 {
   z-index: 250;
 }
 
-.wheel-water-splash {
-  position: fixed;
-  z-index: 2;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.wheel-splash-drop {
-  position: absolute;
-  width: var(--drop-width, 9px);
-  height: var(--drop-height, 14px);
-  border-radius: 70% 20% 70% 70%;
-  background: linear-gradient(145deg, #fff 0%, #c8f7ff 17%, #74daf0 48%, #1684b5 100%);
-  box-shadow: inset -1px -2px 3px rgba(4, 83, 133, 0.28), 0 1px 7px rgba(71, 207, 239, 0.56);
-  opacity: 0;
-  transform: translate(-50%, -50%) rotate(var(--drop-rotation)) scale(.25);
-  animation: wheel-splash-arc 1050ms cubic-bezier(.18,.65,.3,1) forwards;
-}
-
-.wheel-splash-drop::after {
-  content: "";
-  position: absolute;
-  top: 19%;
-  left: 23%;
-  width: 22%;
-  height: 18%;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.88);
-  filter: blur(.3px);
-}
-
-.wheel-splash-bubble {
-  border: 1px solid rgba(221, 251, 255, 0.95);
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 25%, #fff 0 8%, #b9f3ff 18%, rgba(74, 196, 227, 0.28) 66%, rgba(255, 255, 255, 0.08) 100%);
-  box-shadow: inset 1px 1px 3px rgba(255, 255, 255, 0.9), 0 0 7px rgba(95, 217, 241, 0.42);
-}
-
-.wheel-splash-bubble::after {
-  display: none;
-}
-
-.wheel-splash-ring {
-  position: absolute;
-  width: 18px;
-  height: 8px;
-  border: 2px solid rgba(144, 224, 239, 0.95);
-  border-radius: 50%;
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(.25);
-  animation: wheel-splash-ripple 850ms ease-out forwards;
-}
-
-.wheel-splash-ring-secondary {
-  width: 12px;
-  height: 5px;
-  border-width: 1px;
-  border-color: rgba(221, 251, 255, 0.9);
-  animation-duration: 950ms;
-}
-
-@keyframes wheel-splash-arc {
-  0% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--drop-rotation)) scale(.2); }
-  12% { opacity: .95; }
-  58% { opacity: .9; transform: translate(calc(-50% + var(--splash-apex-x)), calc(-50% + var(--splash-apex-y))) rotate(var(--drop-rotation)) scale(1); }
-  100% { opacity: 0; transform: translate(calc(-50% + var(--splash-x)), calc(-50% + var(--splash-y))) rotate(var(--drop-rotation)) scale(.55); }
-}
-
-@keyframes wheel-splash-ripple {
-  0% { opacity: 0; transform: translate(-50%, -50%) scale(.25); }
-  18% { opacity: .85; }
-  100% { opacity: 0; transform: translate(-50%, -50%) scale(4.2); }
-}
-
 .wheel-modal {
   position: relative;
   width: min(540px, 92vw);
@@ -677,11 +602,7 @@ body, h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
   padding: 24px 24px 16px;
   border-radius: 0;
-  background-color: #fff;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url("images/wheel-crab-background.jpg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
+  background: #fff;
   text-align: center;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
   scrollbar-width: none;
@@ -779,20 +700,20 @@ body, h1, h2, h3, h4, h5, h6 {
   z-index: 1000;
   top: 0;
   left: 0;
-  width: 46px;
-  height: 46px;
+  width: 28px;
+  height: 28px;
   pointer-events: none;
   opacity: 0;
-  transform: translate(-50%, -50%) rotate(var(--fish-angle, 0deg));
+  transform: translate(-50%, -50%) rotate(var(--ball-tilt, 0deg));
   transition: opacity 0.12s ease;
   will-change: left, top, transform;
 }
 
-.volleyball-cursor img {
+.volleyball-cursor svg {
   display: block;
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 2px 4px rgba(8, 35, 50, 0.3));
+  filter: drop-shadow(0 2px 3px rgba(8, 35, 50, 0.35));
 }
 
 .volleyball-trail-particle {
@@ -802,14 +723,14 @@ body, h1, h2, h3, h4, h5, h6 {
   height: var(--trail-size, 5px);
   border-radius: 50%;
   pointer-events: none;
-  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(125,224,255,.88) 48%, rgba(52,161,210,.42) 78%, transparent 100%);
-  box-shadow: 0 0 12px rgba(117, 212, 238, 0.72), 0 0 22px rgba(68, 183, 228, 0.34);
-  animation: volleyball-trail-fade 760ms ease-out forwards;
+  background: radial-gradient(circle, rgba(255,255,255,.9) 0%, rgba(115,204,230,.45) 70%, transparent 100%);
+  box-shadow: 0 0 8px rgba(117, 212, 238, 0.38);
+  animation: volleyball-trail-fade 520ms ease-out forwards;
 }
 
 @keyframes volleyball-trail-fade {
-  0% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
-  100% { opacity: 0; transform: translate(-50%, -78%) scale(0.12); }
+  0% { opacity: 0.72; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -62%) scale(0.2); }
 }
 
 @media (max-width: 520px) {

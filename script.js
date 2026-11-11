@@ -100,9 +100,6 @@
     let activeModalItem = null;
     let activeModalQty = 1;
     let wheelSpinning = false;
-    let wheelSpinCount = 0;
-    let wheelRotation = 0;
-    let backgroundMusicStarted = false;
     let lastCursorPoint = null;
     let cursorTrailTick = 0;
 
@@ -120,38 +117,11 @@
 
     // Initialize Page
     document.addEventListener("DOMContentLoaded", () => {
+      initHeroObserver();
       initVolleyballCursor();
-      startBackgroundMusic();
       renderMenu();
       updateCartUI();
     });
-
-    document.addEventListener("pointerdown", startBackgroundMusic, { once: true });
-    document.addEventListener("keydown", startBackgroundMusic, { once: true });
-
-    function startBackgroundMusic() {
-      if (backgroundMusicStarted) return;
-      const audio = document.getElementById("backgroundMusic");
-      if (!audio) return;
-      const playAttempt = audio.play();
-      if (playAttempt && typeof playAttempt.then === "function") {
-        playAttempt.then(() => { backgroundMusicStarted = true; }).catch(() => {});
-      } else {
-        backgroundMusicStarted = true;
-      }
-    }
-
-    function toggleBackgroundMusic() {
-      const audio = document.getElementById("backgroundMusic");
-      const button = document.getElementById("musicToggleBtn");
-      const icon = document.getElementById("musicToggleIcon");
-      const label = document.getElementById("musicToggleLabel");
-      audio.muted = !audio.muted;
-      if (!audio.muted) startBackgroundMusic();
-      button.setAttribute("aria-pressed", String(audio.muted));
-      icon.className = `fa ${audio.muted ? "fa-volume-off" : "fa-volume-up"} fa-fw w3-margin-right`;
-      label.textContent = audio.muted ? "UNMUTE MUSIC" : "MUTE MUSIC";
-    }
 
     function initVolleyballCursor() {
       if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -166,20 +136,17 @@
           const dx = x - lastCursorPoint.x;
           const dy = y - lastCursorPoint.y;
           const distance = Math.hypot(dx, dy);
-          if (distance > 3 && cursorTrailTick++ % 1 === 0) {
-            const arc = Math.min(24, distance * 0.2);
+          if (distance > 5 && cursorTrailTick++ % 2 === 0) {
+            const arc = Math.min(18, distance * 0.16);
             const particle = document.createElement("span");
             particle.className = "volleyball-trail-particle";
             particle.style.left = `${x - dx * 0.32}px`;
             particle.style.top = `${y - dy * 0.32 - arc}px`;
-            particle.style.setProperty("--trail-size", `${Math.max(6, Math.min(12, distance * 0.18))}px`);
+            particle.style.setProperty("--trail-size", `${Math.max(3, Math.min(8, distance * 0.12))}px`);
             document.body.appendChild(particle);
             particle.addEventListener("animationend", () => particle.remove(), { once: true });
           }
-          if (distance > 1) {
-            const heading = Math.atan2(dy, dx) * (180 / Math.PI);
-            ball.style.setProperty("--fish-angle", `${heading}deg`);
-          }
+          ball.style.setProperty("--ball-tilt", `${Math.max(-30, Math.min(30, dx * 1.8))}deg`);
         }
         lastCursorPoint = { x, y };
       }, { passive: true });
@@ -219,7 +186,6 @@
           case "wheel-close": closeFoodWheel(); break;
           case "wheel-overlay": if (event.target.id === "foodWheelOverlay") closeFoodWheel(); break;
           case "wheel-spin": spinFoodWheel(); break;
-          case "music-toggle": toggleBackgroundMusic(); break;
         }
       }
     });
@@ -228,10 +194,7 @@
 
     function openFoodWheel() {
       renderFoodWheel();
-      wheelSpinCount = 0;
-      wheelRotation = 0;
       const wheelOverlay = document.getElementById("foodWheelOverlay");
-      document.getElementById("wheelWaterSplash").innerHTML = "";
       wheelOverlay.classList.add("open");
       wheelOverlay.setAttribute("aria-hidden", "false");
       document.getElementById("wheelResult").textContent = "";
@@ -264,6 +227,42 @@
       }).join("") + '<circle cx="250" cy="250" r="20" fill="#fff" stroke="#102a3a" stroke-width="4"/>';
       svg.style.transform = "rotate(0deg)";
     }
+
+    function spinFoodWheel() {
+      if (wheelSpinning) return;
+      wheelSpinning = true;
+      const btn = document.getElementById("spinWheelBtn");
+      const wheel = document.getElementById("foodWheel");
+      const result = document.getElementById("wheelResult");
+      btn.disabled = true;
+      result.textContent = "Spinning…";
+      const chosenIndex = Math.floor(Math.random() * MENU_ITEMS.length);
+      const slice = 360 / MENU_ITEMS.length;
+      const targetAngle = 360 * 6 + (360 - (chosenIndex * slice + slice / 2));
+      wheel.style.transition = "transform 4s cubic-bezier(.12,.78,.12,1)";
+      wheel.style.transform = `rotate(${targetAngle}deg)`;
+      wheel.addEventListener("transitionend", () => {
+        result.textContent = `You got: ${MENU_ITEMS[chosenIndex].name}!`;
+        btn.disabled = false;
+        wheelSpinning = false;
+      }, { once: true });
+    }
+
+    // Auto-hide sidebar on Hero, show & fix on Menu/Checkout
+    function initHeroObserver() {
+      const heroSection = document.getElementById("home");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            document.body.classList.add("on-hero");
+            if (window.innerWidth <= 992) {
+              w3_close();
+            }
+          } else {
+            document.body.classList.remove("on-hero");
+          }
+        });
+      }, { threshold: 0.25 });
 
     function spinFoodWheel() {
       if (wheelSpinning) return;
