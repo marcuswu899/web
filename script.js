@@ -100,6 +100,8 @@
     let activeModalItem = null;
     let activeModalQty = 1;
     let wheelSpinning = false;
+    let wheelSpinCount = 0;
+    let wheelRotation = 0;
     let lastCursorPoint = null;
     let cursorTrailTick = 0;
 
@@ -114,11 +116,15 @@
     const cartCountBadge = document.getElementById("cartCountBadge");
     const cartBtnTotal = document.getElementById("cartBtnTotal");
     const floatingCartBtn = document.getElementById("floatingCartBtn");
+    const cartToast = document.getElementById("cartToast");
+    const cartToastItem = document.getElementById("cartToastItem");
+    let cartToastTimer;
 
     // Initialize Page
     document.addEventListener("DOMContentLoaded", () => {
       initHeroObserver();
       initVolleyballCursor();
+      syncMusicToggle();
       renderMenu();
       updateCartUI();
     });
@@ -142,11 +148,14 @@
             particle.className = "volleyball-trail-particle";
             particle.style.left = `${x - dx * 0.32}px`;
             particle.style.top = `${y - dy * 0.32 - arc}px`;
-            particle.style.setProperty("--trail-size", `${Math.max(3, Math.min(8, distance * 0.12))}px`);
+            particle.style.setProperty("--trail-size", `${Math.max(6, Math.min(13, distance * 0.2))}px`);
             document.body.appendChild(particle);
             particle.addEventListener("animationend", () => particle.remove(), { once: true });
           }
-          ball.style.setProperty("--ball-tilt", `${Math.max(-30, Math.min(30, dx * 1.8))}deg`);
+          if (distance > 1) {
+            const heading = Math.atan2(dy, dx) * (180 / Math.PI);
+            ball.style.setProperty("--fish-angle", `${heading}deg`);
+          }
         }
         lastCursorPoint = { x, y };
       }, { passive: true });
@@ -183,6 +192,7 @@
           case "cart-checkout": proceedToCheckoutFromCart(); break;
           case "success-close": closeSuccessModal(); break;
           case "wheel-open": event.preventDefault(); openFoodWheel(); break;
+          case "music-toggle": toggleBackgroundMusic(); break;
           case "wheel-close": closeFoodWheel(); break;
           case "wheel-overlay": if (event.target.id === "foodWheelOverlay") closeFoodWheel(); break;
           case "wheel-spin": spinFoodWheel(); break;
@@ -192,8 +202,67 @@
 
     document.getElementById("checkoutForm").addEventListener("submit", handlePlaceOrder);
 
+    const deliverySubmarine = document.querySelector(".delivery-submarine");
+    let submarineLapProgress = 0;
+    let submarineLastFrame = null;
+    let submarineBoostStartedAt = null;
+    let submarineWakeTimer;
+
+    function animateSubmarineLap(timestamp) {
+      if (submarineLastFrame !== null && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        const delta = timestamp - submarineLastFrame;
+        let speed = 1;
+        if (submarineBoostStartedAt !== null) {
+          const boostElapsed = timestamp - submarineBoostStartedAt;
+          const smoothStep = value => value * value * (3 - 2 * value);
+
+          if (boostElapsed < 1000) {
+            speed = 1 + smoothStep(boostElapsed / 1000);
+          } else if (boostElapsed < 2000) {
+            speed = 2;
+          } else if (boostElapsed < 4000) {
+            speed = 2 - smoothStep((boostElapsed - 2000) / 2000);
+          } else {
+            submarineBoostStartedAt = null;
+          }
+        }
+        submarineLapProgress = (submarineLapProgress + delta * speed / 60000) % 1;
+        deliverySubmarine.style.offsetDistance = `${submarineLapProgress * 100}%`;
+      }
+      submarineLastFrame = timestamp;
+      window.requestAnimationFrame(animateSubmarineLap);
+    }
+    window.requestAnimationFrame(animateSubmarineLap);
+
+    deliverySubmarine.addEventListener("click", () => {
+      window.clearTimeout(submarineWakeTimer);
+      deliverySubmarine.classList.remove("boosting");
+      void deliverySubmarine.offsetWidth;
+      submarineBoostStartedAt = performance.now();
+      deliverySubmarine.classList.add("boosting");
+      submarineWakeTimer = window.setTimeout(() => deliverySubmarine.classList.remove("boosting"), 1400);
+    });
+
+    function syncMusicToggle() {
+      const audio = document.getElementById("backgroundMusic");
+      if (!audio) return;
+      const muted = audio.muted;
+      document.getElementById("musicToggleIcon").className = `fa ${muted ? "fa-volume-off" : "fa-volume-up"} fa-fw w3-margin-right`;
+      document.getElementById("musicToggleLabel").textContent = muted ? "UNMUTE MUSIC" : "MUTE MUSIC";
+    }
+
+    function toggleBackgroundMusic() {
+      const audio = document.getElementById("backgroundMusic");
+      if (!audio) return;
+      audio.muted = !audio.muted;
+      if (!audio.muted) audio.play().catch(() => {});
+      syncMusicToggle();
+    }
+
     function openFoodWheel() {
       renderFoodWheel();
+      wheelSpinCount = 0;
+      wheelRotation = 0;
       const wheelOverlay = document.getElementById("foodWheelOverlay");
       wheelOverlay.classList.add("open");
       wheelOverlay.setAttribute("aria-hidden", "false");
@@ -228,29 +297,10 @@
       svg.style.transform = "rotate(0deg)";
     }
 
-    function spinFoodWheel() {
-      if (wheelSpinning) return;
-      wheelSpinning = true;
-      const btn = document.getElementById("spinWheelBtn");
-      const wheel = document.getElementById("foodWheel");
-      const result = document.getElementById("wheelResult");
-      btn.disabled = true;
-      result.textContent = "Spinning…";
-      const chosenIndex = Math.floor(Math.random() * MENU_ITEMS.length);
-      const slice = 360 / MENU_ITEMS.length;
-      const targetAngle = 360 * 6 + (360 - (chosenIndex * slice + slice / 2));
-      wheel.style.transition = "transform 4s cubic-bezier(.12,.78,.12,1)";
-      wheel.style.transform = `rotate(${targetAngle}deg)`;
-      wheel.addEventListener("transitionend", () => {
-        result.textContent = `You got: ${MENU_ITEMS[chosenIndex].name}!`;
-        btn.disabled = false;
-        wheelSpinning = false;
-      }, { once: true });
-    }
-
     // Auto-hide sidebar on Hero, show & fix on Menu/Checkout
     function initHeroObserver() {
       const heroSection = document.getElementById("home");
+      if (!heroSection) return;
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -263,6 +313,8 @@
           }
         });
       }, { threshold: 0.25 });
+      observer.observe(heroSection);
+    }
 
     function spinFoodWheel() {
       if (wheelSpinning) return;
@@ -477,6 +529,19 @@
       cart[itemId] = (cart[itemId] || 0) + quantity;
       updateCartUI();
       bumpCartBtn();
+      showCartToast(itemId, quantity);
+    }
+
+    function showCartToast(itemId, quantity) {
+      const item = MENU_ITEMS.find(menuItem => menuItem.id === itemId);
+      if (!item || !cartToast || !cartToastItem) return;
+
+      cartToastItem.textContent = `${item.name} × ${quantity}`;
+      cartToast.classList.remove("show");
+      void cartToast.offsetWidth;
+      cartToast.classList.add("show");
+      window.clearTimeout(cartToastTimer);
+      cartToastTimer = window.setTimeout(() => cartToast.classList.remove("show"), 1000);
     }
 
     function changeCartItemQty(itemId, delta) {
@@ -519,7 +584,7 @@
             <span class="w3-small">Add delicious dorm meals to begin!</span>
           </div>
         `;
-        summaryHtml = `<div class="w3-text-grey w3-center w3-padding-16">No items selected yet. Choose your favorite meals from the menu above!</div>`;
+        summaryHtml = `<div class="summary-empty-state">No items selected yet. Choose your favorite meals from the menu above!</div>`;
       } else {
         itemIds.forEach(id => {
           const item = MENU_ITEMS.find(m => m.id === id);
