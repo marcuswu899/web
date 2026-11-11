@@ -69,7 +69,16 @@ body, h1, h2, h3, h4, h5, h6 {
   background: #ffffff;
   box-shadow: 3px 0 20px rgba(0, 15, 28, 0.14);
   overflow-y: auto;
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  transform: translateX(-100%);
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.35s ease;
+}
+
+#mySidebar.open {
+  transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .sidebar-brand { padding: 22px 12px 32px 24px; }
@@ -152,6 +161,7 @@ body, h1, h2, h3, h4, h5, h6 {
     max-height: 100vh;
     width: 300px;
     opacity: 1;
+    visibility: visible;
     pointer-events: auto;
   }
 
@@ -172,13 +182,15 @@ body, h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 992px) {
   #mySidebar {
-    top: 16px;
+    display: block;
+    top: 0;
     left: 0 !important;
     width: calc(100vw - 32px);
-    height: auto;
-    max-height: calc(100vh - 32px);
-    border-radius: 12px;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
   }
+
   .boxed-inner {
     margin-left: 0 !important;
   }

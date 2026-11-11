@@ -522,12 +522,12 @@
 
     // Sidebar functions (reference example.html)
     function w3_open() {
-      sidebar.style.display = "block";
+      sidebar.classList.add("open");
       overlay.style.display = "block";
     }
 
     function w3_close() {
-      sidebar.style.display = "none";
+      sidebar.classList.remove("open");
       overlay.style.display = "none";
     }
 
