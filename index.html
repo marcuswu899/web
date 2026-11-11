@@ -32,6 +32,9 @@
       <a href="#menu" data-action="menu-close" class="w3-bar-item w3-button nav-link">
         <i class="fa fa-cutlery fa-fw w3-margin-right"></i>MENU
       </a>
+      <a href="#topSellingTitle" data-action="top-selling-nav" class="w3-bar-item w3-button nav-link">
+        <img class="sidebar-nav-icon" src="images/top-selling.png" alt="" aria-hidden="true">TOP-SELLING
+      </a>
       <a href="#checkoutHeader" data-action="menu-close" class="w3-bar-item w3-button nav-link">
         <i class="fa fa-credit-card fa-fw w3-margin-right"></i>CHECKOUT
       </a>
@@ -90,6 +93,32 @@
       <div id="pagination" class="pagination-container"></div>
     </section>
 
+    <section class="top-selling-section" aria-labelledby="topSellingTitle">
+      <div class="top-selling-content">
+        <h2 id="topSellingTitle">Top-selling student meals</h2>
+        <p class="top-selling-note">Student favorites at a glance</p>
+        <div class="top-selling-list">
+          <div class="top-selling-item">
+            <h3>Squid Ink Pasta</h3>
+            <div class="top-selling-track" role="progressbar" aria-label="Squid Ink Pasta popularity index" aria-valuemin="0" aria-valuemax="100" aria-valuenow="96"><span data-target="96" style="width:0%">0%</span></div>
+          </div>
+          <div class="top-selling-item">
+            <h3>Shrimp Pasta</h3>
+            <div class="top-selling-track" role="progressbar" aria-label="Shrimp Pasta popularity index" aria-valuemin="0" aria-valuemax="100" aria-valuenow="88"><span data-target="88" style="width:0%">0%</span></div>
+          </div>
+          <div class="top-selling-item">
+            <h3>Salmon Risotto</h3>
+            <div class="top-selling-track" role="progressbar" aria-label="Salmon Risotto popularity index" aria-valuemin="0" aria-valuemax="100" aria-valuenow="82"><span data-target="82" style="width:0%">0%</span></div>
+          </div>
+          <div class="top-selling-item">
+            <h3>Seafood Chowder</h3>
+            <div class="top-selling-track" role="progressbar" aria-label="Seafood Chowder popularity index" aria-valuemin="0" aria-valuemax="100" aria-valuenow="74"><span data-target="74" style="width:0%">0%</span></div>
+          </div>
+        </div>
+        <p class="top-selling-disclaimer">Popularity index for featured menu picks.</p>
+      </div>
+    </section>
+
     <!-- 3. Checkout Page Section (Evening Tone Transition) -->
     <section id="checkout" class="checkout-section">
       <div class="checkout-container">
@@ -131,10 +160,7 @@
             <form id="checkoutForm">
               <div class="form-group">
                 <label for="studentName">Student Full Name</label>
-                <div class="field-with-fish">
-                  <input type="text" id="studentName" required placeholder="e.g. Alex Wu">
-                  <img class="field-fish-icon" src="images/fish-cursor.png" alt="" aria-hidden="true">
-                </div>
+                <input type="text" id="studentName" required placeholder="e.g. Alex Wu">
               </div>
 
               <div class="form-group">
