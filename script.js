@@ -467,6 +467,7 @@
           drop.style.setProperty("--splash-y", `${Math.max(18, distance * (0.35 + Math.random() * 0.22))}px`);
           drop.style.setProperty("--splash-apex-x", `${Math.cos(angle) * distance * 0.68}px`);
           drop.style.setProperty("--splash-apex-y", `${Math.sin(angle) * distance}px`);
+          drop.style.setProperty("--splash-y-out", `${Math.sin(angle) * distance * 1.5}px`);
           drop.style.setProperty("--drop-rotation", `${(angle * 180 / Math.PI) + 90}deg`);
           drop.style.animationDelay = `${burstDelay + Math.random() * 110}ms`;
           layer.appendChild(drop);

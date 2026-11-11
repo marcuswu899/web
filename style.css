@@ -797,8 +797,7 @@ body, h1, h2, h3, h4, h5, h6 {
 @keyframes wheel-splash-drop-burst {
   0% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--drop-rotation, 0deg)) scale(.45); }
   12% { opacity: 1; }
-  48% { opacity: 1; transform: translate(calc(-50% + var(--splash-apex-x)), calc(-50% + var(--splash-apex-y))) rotate(var(--drop-rotation, 0deg)) scale(1); }
-  100% { opacity: 0; transform: translate(calc(-50% + var(--splash-x)), calc(-50% + var(--splash-y))) rotate(var(--drop-rotation, 0deg)) scale(.65); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--splash-x)), calc(-50% + var(--splash-y-out))) rotate(var(--drop-rotation, 0deg)) scale(.7); }
 }
 
 @media (prefers-reduced-motion: reduce) {
