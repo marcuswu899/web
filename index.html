@@ -26,6 +26,9 @@
       <p>Campus Virtual Kitchen</p>
     </div>
     <div class="w3-bar-block w3-padding-16">
+      <a href="#home" data-action="menu-close" class="w3-bar-item w3-button nav-link">
+        <i class="fa fa-home fa-fw w3-margin-right"></i>HOME
+      </a>
       <a href="#menu" data-action="menu-close" class="w3-bar-item w3-button nav-link">
         <i class="fa fa-cutlery fa-fw w3-margin-right"></i>MENU
       </a>
@@ -53,6 +56,17 @@
     <!-- Boxed Content (1600px Max-Width Centered with margins on wide screens) -->
     <div class="boxed-content">
       <div class="boxed-inner">
+
+    <!-- Home Page -->
+    <section id="home" class="home-section">
+      <div class="home-cta">
+        <h1 class="home-brand">OCEANBITE</h1>
+        <a href="#menu" class="start-order-btn">START ORDER</a>
+      </div>
+      <button type="button" class="home-crab" aria-label="Create another crab">
+        <img src="images/crab.png" alt="">
+      </button>
+    </section>
 
     <!-- 2. Menu Page Section (Dusk Sunset Theme) -->
     <section id="menu" class="menu-section">
@@ -98,7 +112,7 @@
             <div class="summary-totals">
               <div class="summary-line">
                 <span>Subtotal</span>
-                <span id="checkoutSubtotal">$0.00</span>
+                <span id="checkoutSubtotal">NT$0</span>
               </div>
               <div class="summary-line">
                 <span>Campus Speed Delivery</span>
@@ -106,7 +120,7 @@
               </div>
               <div class="summary-line grand-total">
                 <span>Grand Total</span>
-                <span id="checkoutGrandTotal">$0.00</span>
+                <span id="checkoutGrandTotal">NT$0</span>
               </div>
             </div>
           </div>
@@ -134,11 +148,26 @@
                   <label for="dormBuilding">Dormitory / Campus Building</label>
                   <select id="dormBuilding" required>
                     <option value="" disabled selected>Select your campus dorm</option>
-                    <option value="North Dorm Complex">North Dormitory Complex (Building A/B)</option>
-                    <option value="South Dorm Complex">South Dormitory Complex (Building C/D)</option>
-                    <option value="Ocean View Residence">Ocean View Student Residence</option>
-                    <option value="Campus Main Gate">Campus Main Gate Pick-up Point</option>
-                    <option value="University Library Plaza">University Library Plaza</option>
+                    <optgroup label="Wuling Village">
+                      <option value="Wuling Village 1">Wuling Village 1</option>
+                      <option value="Wuling Village 2">Wuling Village 2</option>
+                      <option value="Wuling Village 3">Wuling Village 3</option>
+                      <option value="Wuling Village 4">Wuling Village 4</option>
+                    </optgroup>
+                    <optgroup label="Tsui-heng Dormitory Building">
+                      <option value="Tsui-heng Dormitory Building A">Tsui-heng Dormitory Building A</option>
+                      <option value="Tsui-heng Dormitory Building B">Tsui-heng Dormitory Building B</option>
+                      <option value="Tsui-heng Dormitory Building C">Tsui-heng Dormitory Building C</option>
+                      <option value="Tsui-heng Dormitory Building D">Tsui-heng Dormitory Building D</option>
+                      <option value="Tsui-heng Dormitory Building E">Tsui-heng Dormitory Building E</option>
+                      <option value="Tsui-heng Dormitory Building F">Tsui-heng Dormitory Building F</option>
+                      <option value="Tsui-heng Dormitory Building G">Tsui-heng Dormitory Building G</option>
+                      <option value="Tsui-heng Dormitory Building H">Tsui-heng Dormitory Building H</option>
+                      <option value="Tsui-heng Dormitory Building I">Tsui-heng Dormitory Building I</option>
+                      <option value="Tsui-heng Dormitory Building J">Tsui-heng Dormitory Building J</option>
+                      <option value="Tsui-heng Dormitory Building K">Tsui-heng Dormitory Building K</option>
+                      <option value="Tsui-heng Dormitory Building L">Tsui-heng Dormitory Building L</option>
+                    </optgroup>
                   </select>
                 </div>
                 <div class="form-group">
@@ -208,13 +237,12 @@
     <div class="modal-card">
       <button class="modal-close-btn" data-action="modal-close" aria-label="Close details">&times;</button>
       <div class="modal-img-area">
-        <i id="modalIcon" class="fa fa-cutlery food-placeholder-icon" style="font-size:4.5rem;"></i>
-        <span class="food-placeholder-text">OceanBite Kitchen Spec</span>
+        <img id="modalImage" class="modal-image" src="" alt="">
       </div>
       <div class="modal-body">
         <div class="modal-title-row">
           <h3 id="modalTitle" class="modal-title">Item Title</h3>
-          <span id="modalPrice" class="modal-price">$0.00</span>
+          <span id="modalPrice" class="modal-price">NT$0</span>
         </div>
         <span id="modalCategory" class="modal-category-badge">Category</span>
         <p id="modalDesc" class="modal-desc">Detailed food description goes here.</p>
@@ -239,7 +267,7 @@
       <i class="fa fa-shopping-cart" style="font-size:1.35rem;"></i>
       <span id="cartCountBadge" class="cart-count-badge">0</span>
     </div>
-    <span id="cartBtnTotal" class="cart-btn-total">$0.00</span>
+    <span id="cartBtnTotal" class="cart-btn-total">NT$0</span>
   </div>
 
   <audio id="backgroundMusic" autoplay loop preload="auto" muted>
@@ -259,7 +287,7 @@
     <div class="cart-drawer-footer">
       <div class="cart-subtotal-row">
         <span>Total:</span>
-        <span id="cartDrawerSubtotal">$0.00</span>
+        <span id="cartDrawerSubtotal">NT$0</span>
       </div>
       <button class="checkout-btn" data-action="cart-checkout">
         Proceed to Checkout <i class="fa fa-arrow-right"></i>

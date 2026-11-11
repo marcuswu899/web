@@ -5,7 +5,7 @@
         name: "Squid Ink Pasta",
         category: "staples",
         categoryLabel: "Staples",
-        price: 12.99,
+        price: 170,
         icon: "fa-cutlery",
         desc: "Rich authentic squid ink linguine tossed with calamari rings, garlic butter, sea salt, and extra virgin olive oil."
       },
@@ -14,7 +14,7 @@
         name: "Clam Pasta",
         category: "staples",
         categoryLabel: "Staples",
-        price: 10.99,
+        price: 150,
         icon: "fa-cutlery",
         desc: "Fresh ocean clams simmered in white wine garlic broth over al dente spaghetti, finished with garden parsley."
       },
@@ -23,7 +23,7 @@
         name: "Shrimp Pasta",
         category: "staples",
         categoryLabel: "Staples",
-        price: 11.49,
+        price: 160,
         icon: "fa-cutlery",
         desc: "Tender ocean shrimp pan-seared with cherry tomatoes and tossed in a creamy sun-dried tomato pesto pasta."
       },
@@ -32,7 +32,7 @@
         name: "Salmon Risotto",
         category: "staples",
         categoryLabel: "Staples",
-        price: 12.49,
+        price: 180,
         icon: "fa-spoon",
         desc: "Slow-cooked Italian arborio rice infused with savory herb broth and topped with a golden seared salmon fillet."
       },
@@ -41,7 +41,7 @@
         name: "Octopus Risotto",
         category: "staples",
         categoryLabel: "Staples",
-        price: 11.99,
+        price: 180,
         icon: "fa-spoon",
         desc: "Tender braised octopus tentacles folded into a creamy saffron risotto with parmesan and lemon zest."
       },
@@ -50,7 +50,7 @@
         name: "Clam Risotto",
         category: "staples",
         categoryLabel: "Staples",
-        price: 10.49,
+        price: 145,
         icon: "fa-spoon",
         desc: "Velvety clam broth risotto cooked to perfection with sweet baby clams, melted butter, and fresh herbs."
       },
@@ -59,7 +59,7 @@
         name: "Lobster Salad",
         category: "drinks-snacks",
         categoryLabel: "Drinks & Snacks",
-        price: 8.99,
+        price: 130,
         icon: "fa-leaf",
         desc: "Chunky succulent lobster meat tossed with crisp garden greens, creamy avocado slices, and honey citrus vinaigrette."
       },
@@ -68,7 +68,7 @@
         name: "Crab Stick Salad",
         category: "drinks-snacks",
         categoryLabel: "Drinks & Snacks",
-        price: 6.99,
+        price: 80,
         icon: "fa-leaf",
         desc: "Shredded snow crab sticks paired with julienned cucumbers, sweet corn kernels, and fragrant roasted sesame dressing."
       },
@@ -77,7 +77,7 @@
         name: "Seafood Chowder",
         category: "drinks-snacks",
         categoryLabel: "Drinks & Snacks",
-        price: 5.49,
+        price: 75,
         icon: "fa-coffee",
         desc: "Hearty traditional Atlantic chowder loaded with tender clams, white fish fillets, diced potatoes, and cream."
       },
@@ -86,11 +86,15 @@
         name: "Honey lemon water",
         category: "drinks-snacks",
         categoryLabel: "Drinks & Snacks",
-        price: 2.99,
+        price: 40,
         icon: "fa-glass",
         desc: "Cold freshly squeezed organic lemon juice lightly sweetened with wildflower honey and garnished with mint leaves."
       }
     ];
+
+    function formatPrice(price) {
+      return `NT$${price.toLocaleString("zh-TW")}`;
+    }
 
     // State Variables
     let currentCategory = "all";
@@ -119,15 +123,55 @@
     const cartToast = document.getElementById("cartToast");
     const cartToastItem = document.getElementById("cartToastItem");
     let cartToastTimer;
+    let filterTransitionTimer;
 
     // Initialize Page
     document.addEventListener("DOMContentLoaded", () => {
       initHeroObserver();
       initVolleyballCursor();
+      initCrabSpawning();
       syncMusicToggle();
       renderMenu();
       updateCartUI();
     });
+
+    function initCrabSpawning() {
+      const home = document.getElementById("home");
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const startCrabLifetime = crab => {
+        window.setTimeout(() => {
+          crab.disabled = true;
+          if (prefersReducedMotion.matches) {
+            crab.remove();
+            return;
+          }
+          crab.classList.add("is-disappearing");
+          window.setTimeout(() => crab.remove(), 420);
+        }, 5000);
+      };
+
+      home.addEventListener("click", event => {
+        const crab = event.target.closest(".home-crab");
+        if (!crab) return;
+
+        const newCrab = crab.cloneNode(true);
+        newCrab.classList.remove("is-spawning", "is-disappearing");
+        newCrab.disabled = false;
+        newCrab.style.left = `${crab.offsetLeft}px`;
+        if (!prefersReducedMotion.matches) {
+          const maxJumpHeight = Math.max(0, home.clientHeight - crab.offsetHeight - 48);
+          newCrab.style.setProperty("--crab-jump-offset", `-${Math.random() * maxJumpHeight}px`);
+          newCrab.classList.add("is-spawning");
+          newCrab.addEventListener("animationend", event => {
+            if (event.animationName !== "crab-jump") return;
+            newCrab.classList.remove("is-spawning");
+            startCrabLifetime(newCrab);
+          }, { once: true });
+        }
+        home.appendChild(newCrab);
+        if (prefersReducedMotion.matches) startCrabLifetime(newCrab);
+      });
+    }
 
     function initVolleyballCursor() {
       if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -415,7 +459,17 @@
         btn.classList.add("active");
         currentCategory = btn.dataset.category;
         currentPage = 1;
-        renderMenu();
+        window.clearTimeout(filterTransitionTimer);
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          renderMenu();
+          return;
+        }
+        foodGrid.querySelectorAll(".food-card").forEach(card => {
+          card.classList.remove("filter-fade-in", "filter-fade-out");
+          void card.offsetWidth;
+          card.classList.add("filter-fade-out");
+        });
+        filterTransitionTimer = window.setTimeout(() => renderMenu(true), 180);
       });
     });
 
@@ -424,7 +478,7 @@
       return MENU_ITEMS.filter(item => item.category === currentCategory);
     }
 
-    function renderMenu() {
+    function renderMenu(animateIn = false) {
       const items = getFilteredItems();
       const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
       if (currentPage > totalPages) currentPage = totalPages;
@@ -434,14 +488,14 @@
 
       // Render Cards
       foodGrid.innerHTML = displayItems.map(item => `
-        <article class="food-card" data-item-id="${item.id}">
+        <article class="food-card${animateIn ? " filter-fade-in" : ""}" data-item-id="${item.id}">
           <div class="food-img-container">
             <img class="food-image" src="images/meals/${item.name}.jpg" alt="${item.name}" loading="lazy" decoding="async">
           </div>
           <div class="food-card-body">
             <div class="food-header">
               <h3 class="food-title">${item.name}</h3>
-              <span class="food-price">$${item.price.toFixed(2)}</span>
+              <span class="food-price">${formatPrice(item.price)}</span>
             </div>
             <p class="food-desc">${item.desc}</p>
             <div class="food-action">
@@ -488,10 +542,12 @@
       activeModalQty = 1;
 
       document.getElementById("modalTitle").textContent = item.name;
-      document.getElementById("modalPrice").textContent = `$${item.price.toFixed(2)}`;
+      document.getElementById("modalPrice").textContent = formatPrice(item.price);
       document.getElementById("modalCategory").textContent = item.categoryLabel;
       document.getElementById("modalDesc").textContent = item.desc;
-      document.getElementById("modalIcon").className = `fa ${item.icon} food-placeholder-icon`;
+      const modalImage = document.getElementById("modalImage");
+      modalImage.src = `images/meals/${item.name}.jpg`;
+      modalImage.alt = item.name;
       document.getElementById("modalQtyDisplay").textContent = activeModalQty;
 
       document.getElementById("detailModalOverlay").classList.add("open");
@@ -598,7 +654,7 @@
             <div class="cart-item">
               <div class="cart-item-info">
                 <h4 class="cart-item-title">${item.name}</h4>
-                <span class="cart-item-price">$${item.price.toFixed(2)} &times; ${qty} = $${subtotal.toFixed(2)}</span>
+                <span class="cart-item-price">${formatPrice(item.price)} &times; ${qty} = ${formatPrice(subtotal)}</span>
               </div>
               <div class="cart-item-controls">
                 <button type="button" class="cart-qty-btn" data-item-id="${id}" data-delta="-1">&minus;</button>
@@ -613,7 +669,7 @@
               <div>
                 <b>${item.name}</b> <span class="summary-item-qty">&times; ${qty}</span>
               </div>
-              <span>$${subtotal.toFixed(2)}</span>
+              <span>${formatPrice(subtotal)}</span>
             </div>
           `;
         });
@@ -623,10 +679,10 @@
       checkoutSummaryList.innerHTML = summaryHtml;
 
       cartCountBadge.textContent = totalCount;
-      cartBtnTotal.textContent = `$${totalAmount.toFixed(2)}`;
-      document.getElementById("cartDrawerSubtotal").textContent = `$${totalAmount.toFixed(2)}`;
-      document.getElementById("checkoutSubtotal").textContent = `$${totalAmount.toFixed(2)}`;
-      document.getElementById("checkoutGrandTotal").textContent = `$${totalAmount.toFixed(2)}`;
+      cartBtnTotal.textContent = formatPrice(totalAmount);
+      document.getElementById("cartDrawerSubtotal").textContent = formatPrice(totalAmount);
+      document.getElementById("checkoutSubtotal").textContent = formatPrice(totalAmount);
+      document.getElementById("checkoutGrandTotal").textContent = formatPrice(totalAmount);
     }
 
     function proceedToCheckoutFromCart() {
