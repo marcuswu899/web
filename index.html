@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="on-hero">
+<body>
 
   <!-- Mobile Menu Toggle Button (Only appears on small screens / w3-hide-large) -->
   <button id="menuToggleBtn" class="w3-hide-large" data-action="menu-open" aria-label="Open Navigation Menu">
@@ -19,20 +19,12 @@
 
   <!-- Sidebar/menu (Reference example.html: w3-sidebar w3-collapse w3-white w3-animate-left) -->
   <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" id="mySidebar">
-    <div class="w3-container w3-padding-24" style="background-color: var(--ocean-deep); color: white;">
-      <button data-action="menu-close" class="w3-button w3-hide-large w3-right w3-large" aria-label="Close menu">&times;</button>
-      <h3 class="w3-margin-0"><b>OceanBite</b></h3>
-      <p class="w3-small w3-text-light-grey w3-margin-0">Virtual Kitchen for Campus</p>
-    </div>
-    
+    <button data-action="menu-close" class="w3-button w3-hide-large w3-right w3-large sidebar-close-btn" aria-label="Close menu">&times;</button>
     <div class="w3-bar-block w3-padding-16">
-      <a href="#home" data-action="menu-close" class="w3-bar-item w3-button nav-link">
-        <i class="fa fa-home fa-fw w3-margin-right"></i>HOME
-      </a>
       <a href="#menu" data-action="menu-close" class="w3-bar-item w3-button nav-link">
         <i class="fa fa-cutlery fa-fw w3-margin-right"></i>MENU
       </a>
-      <a href="#checkout" data-action="menu-close" class="w3-bar-item w3-button nav-link">
+      <a href="#checkoutHeader" data-action="menu-close" class="w3-bar-item w3-button nav-link">
         <i class="fa fa-credit-card fa-fw w3-margin-right"></i>CHECKOUT
       </a>
       <a href="#contact" data-action="menu-close" class="w3-bar-item w3-button nav-link">
@@ -49,20 +41,6 @@
 
   <!-- Main Content Wrapper -->
   <main class="w3-main">
-
-    <!-- 1. Hero Landing Page Section (100vw Full Bleed Background) -->
-    <section id="home" class="hero-section">
-      <img src="images/home.png" alt="OceanBite Campus Virtual Kitchen" class="hero-bg">
-      <div class="hero-overlay"></div>
-      <div class="hero-bottom-gradient"></div>
-      <div class="hero-content">
-        <h1 class="hero-title">OceanBite Virtual Kitchen</h1>
-        <p class="hero-subtitle">Pause the Books, Taste the Ocean.</p>
-        <a href="#menu" class="start-order-btn">
-          <i class="fa fa-arrow-down w3-margin-right"></i>Start Order
-        </a>
-      </div>
-    </section>
 
     <!-- Boxed Content (1600px Max-Width Centered with margins on wide screens) -->
     <div class="boxed-content">
@@ -93,9 +71,13 @@
     <!-- 3. Checkout Page Section (Evening Tone Transition) -->
     <section id="checkout" class="checkout-section">
       <div class="checkout-container">
-        <div class="checkout-header">
+        <div class="checkout-header" id="checkoutHeader">
           <h2 class="checkout-title">Express Checkout</h2>
           <p class="checkout-subtitle">Zero delivery fee on campus. Hot & fresh delivered straight to your dorm building.</p>
+        </div>
+
+        <div class="checkout-sea-life" aria-hidden="true">
+          <img src="images/checkout-octopus.svg" alt="" />
         </div>
 
         <div class="checkout-grid">
@@ -123,7 +105,7 @@
 
           <!-- Checkout Details Form Card -->
           <div class="checkout-form-card">
-            <h3><i class="fa fa-truck w3-margin-right"></i>Delivery & Payment Details</h3>
+            <h3><img src="images/submarine.png" class="checkout-heading-icon w3-margin-right" alt="" aria-hidden="true">Delivery & Payment Details</h3>
             <form id="checkoutForm">
               <div class="form-group">
                 <label for="studentName">Student Full Name</label>
@@ -186,6 +168,7 @@
               </button>
             </form>
           </div>
+          <img class="delivery-submarine" src="images/checkout-submarine.png" alt="" aria-hidden="true">
         </div>
       </div>
     </section>
@@ -194,7 +177,7 @@
     <footer id="contact" class="site-footer">
       <div class="footer-contact">
         <img src="images/contact.png" alt="Contact Us" class="footer-contact-img">
-        <span>1234-567-890</span>
+        <span>0966092556</span>
       </div>
       <div class="footer-credit">
         Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank" rel="noopener noreferrer">w3.css</a>
@@ -244,6 +227,10 @@
     </div>
     <span id="cartBtnTotal" class="cart-btn-total">$0.00</span>
   </div>
+
+  <audio id="backgroundMusic" autoplay loop preload="auto" muted>
+    <source src="music/Oceans%20(Where%20Feet%20May%20Fail).mp3" type="audio/mpeg">
+  </audio>
 
   <!-- Cart Slide-in Drawer -->
   <div id="cartDrawerOverlay" class="cart-drawer-overlay" data-action="cart-toggle"></div>

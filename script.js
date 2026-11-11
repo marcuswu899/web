@@ -264,7 +264,85 @@
         });
       }, { threshold: 0.25 });
 
-      observer.observe(heroSection);
+    function spinFoodWheel() {
+      if (wheelSpinning) return;
+      wheelSpinning = true;
+      const btn = document.getElementById("spinWheelBtn");
+      const wheel = document.getElementById("foodWheel");
+      const result = document.getElementById("wheelResult");
+      btn.disabled = true;
+      result.textContent = "Spinning…";
+      const chosenIndex = Math.floor(Math.random() * MENU_ITEMS.length);
+      const slice = 360 / MENU_ITEMS.length;
+      const targetSlotAngle = 360 - (chosenIndex * slice + slice / 2);
+      const currentAngle = ((wheelRotation % 360) + 360) % 360;
+      const alignmentTurn = (targetSlotAngle - currentAngle + 360) % 360;
+      const extraTurns = wheelSpinCount === 0 ? 6 : 10;
+      const targetAngle = wheelRotation + extraTurns * 360 + alignmentTurn;
+      wheelSpinCount++;
+      wheelRotation = targetAngle;
+      wheel.style.transition = "transform 4s cubic-bezier(.12,.78,.12,1)";
+      wheel.style.transform = `rotate(${targetAngle}deg)`;
+      wheel.addEventListener("transitionend", () => {
+        result.textContent = `You got: ${MENU_ITEMS[chosenIndex].name}!`;
+        launchWheelSplashEffect();
+        btn.disabled = false;
+        wheelSpinning = false;
+      }, { once: true });
+    }
+
+    function launchWheelSplashEffect() {
+      const layer = document.getElementById("wheelWaterSplash");
+      const wheelFrame = document.querySelector(".wheel-frame");
+      if (!wheelFrame) return;
+      const frame = wheelFrame.getBoundingClientRect();
+      layer.innerHTML = "";
+      const splashPoints = [];
+      while (splashPoints.length < 13) {
+        const position = 0.035 + Math.random() * 0.93;
+        if (splashPoints.every(existing => Math.abs(existing - position) > 0.045)) {
+          splashPoints.push(position);
+        }
+      }
+      splashPoints.forEach(position => {
+        const centerX = frame.left + frame.width * position + (Math.random() - 0.5) * 20;
+        const centerY = frame.bottom - 8 - Math.random() * 42;
+        const burstDelay = Math.random() * 220;
+        const ring = document.createElement("i");
+        ring.className = "wheel-splash-ring";
+        ring.style.left = `${centerX}px`;
+        ring.style.top = `${centerY}px`;
+        ring.style.animationDelay = `${burstDelay}ms`;
+        layer.appendChild(ring);
+
+        const foamRing = document.createElement("i");
+        foamRing.className = "wheel-splash-ring wheel-splash-ring-secondary";
+        foamRing.style.left = `${centerX + (Math.random() - 0.5) * 12}px`;
+        foamRing.style.top = `${centerY + 3}px`;
+        foamRing.style.animationDelay = `${burstDelay + 100}ms`;
+        layer.appendChild(foamRing);
+
+        const count = 10;
+        for (let i = 0; i < count; i++) {
+          const angle = -Math.PI + (Math.PI * i) / (count - 1) + (Math.random() - 0.5) * 0.16;
+          const distance = 76 + Math.random() * 124;
+          const drop = document.createElement("i");
+          drop.className = "wheel-splash-drop";
+          if (i % 5 === 0) drop.classList.add("wheel-splash-bubble");
+          drop.style.left = `${centerX}px`;
+          drop.style.top = `${centerY}px`;
+          drop.style.setProperty("--drop-width", `${6 + Math.random() * 8}px`);
+          drop.style.setProperty("--drop-height", `${10 + Math.random() * 13}px`);
+          drop.style.setProperty("--splash-x", `${Math.cos(angle) * distance}px`);
+          drop.style.setProperty("--splash-y", `${Math.max(18, distance * (0.35 + Math.random() * 0.22))}px`);
+          drop.style.setProperty("--splash-apex-x", `${Math.cos(angle) * distance * 0.68}px`);
+          drop.style.setProperty("--splash-apex-y", `${Math.sin(angle) * distance}px`);
+          drop.style.setProperty("--drop-rotation", `${(angle * 180 / Math.PI) + 90}deg`);
+          drop.style.animationDelay = `${burstDelay + Math.random() * 110}ms`;
+          layer.appendChild(drop);
+        }
+      });
+      window.setTimeout(() => { layer.innerHTML = ""; }, 1900);
     }
 
     // Sidebar functions (reference example.html)
@@ -469,7 +547,7 @@
           summaryHtml += `
             <div class="summary-item-row">
               <div>
-                <b>${item.name}</b> <span class="w3-text-grey">&times; ${qty}</span>
+                <b>${item.name}</b> <span class="summary-item-qty">&times; ${qty}</span>
               </div>
               <span>$${subtotal.toFixed(2)}</span>
             </div>
@@ -489,7 +567,7 @@
 
     function proceedToCheckoutFromCart() {
       toggleCartDrawer();
-      document.getElementById("checkout").scrollIntoView({ behavior: 'smooth' });
+      document.getElementById("checkoutHeader").scrollIntoView({ behavior: 'smooth' });
     }
 
     // 5. Checkout & Payment Selection
