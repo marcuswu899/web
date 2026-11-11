@@ -124,6 +124,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       initHeroObserver();
       initVolleyballCursor();
+      initTopSellingAnimations();
       syncMusicToggle();
       renderMenu();
       updateCartUI();
@@ -183,6 +184,14 @@
         switch (target.dataset.action) {
           case "menu-open": w3_open(); break;
           case "menu-close": w3_close(); break;
+          case "top-selling-nav":
+            event.preventDefault();
+            w3_close();
+            document.querySelector(".top-selling-section")?.scrollIntoView({
+              behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+              block: "center"
+            });
+            break;
           case "select-payment": selectPayment(target); break;
           case "modal-overlay": closeModalOnOverlay(event); break;
           case "modal-close": closeDetailModal(); break;
@@ -202,11 +211,80 @@
 
     document.getElementById("checkoutForm").addEventListener("submit", handlePlaceOrder);
 
+    function initTopSellingAnimations() {
+      const section = document.querySelector(".top-selling-section");
+      const bars = Array.from(document.querySelectorAll(".top-selling-track span[data-target]"));
+      if (!section || !bars.length) return;
+      const pendingAnimations = new Map();
+
+      const animateBar = (bar, index) => {
+        const target = Number(bar.dataset.target);
+        const track = bar.closest(".top-selling-track");
+        const delay = index * 130;
+        const duration = 1400;
+
+        const pending = {};
+        pendingAnimations.set(bar, pending);
+        pending.timer = window.setTimeout(() => {
+          const startedAt = performance.now();
+          const step = now => {
+            if (pendingAnimations.get(bar) !== pending) return;
+            const progress = Math.min(1, (now - startedAt) / duration);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const value = target * eased;
+            bar.style.width = `${value}%`;
+            bar.textContent = `${Math.round(value)}%`;
+            track.setAttribute("aria-valuenow", String(Math.round(value)));
+            if (progress < 1) pending.frame = window.requestAnimationFrame(step);
+            else {
+              bar.style.width = `${target}%`;
+              bar.textContent = `${target}%`;
+              track.setAttribute("aria-valuenow", String(target));
+              pendingAnimations.delete(bar);
+            }
+          };
+          pending.frame = window.requestAnimationFrame(step);
+        }, delay);
+      };
+
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+              bars.forEach(bar => {
+                const target = Number(bar.dataset.target);
+                bar.style.width = `${target}%`;
+                bar.textContent = `${target}%`;
+                bar.closest(".top-selling-track").setAttribute("aria-valuenow", String(target));
+              });
+            } else {
+              bars.forEach(animateBar);
+            }
+            return;
+          }
+
+          bars.forEach(bar => {
+            const pending = pendingAnimations.get(bar);
+            if (pending) {
+              window.clearTimeout(pending.timer);
+              if (pending.frame) window.cancelAnimationFrame(pending.frame);
+              pendingAnimations.delete(bar);
+            }
+            bar.style.width = "0%";
+            bar.textContent = "0%";
+            bar.closest(".top-selling-track").setAttribute("aria-valuenow", "0");
+          });
+        });
+      }, { threshold: 0.2 });
+      observer.observe(section);
+    }
+
     const deliverySubmarine = document.querySelector(".delivery-submarine");
     let submarineLapProgress = 0;
     let submarineLastFrame = null;
     let submarineBoostStartedAt = null;
     let submarineWakeTimer;
+    const submarineLapDuration = 50000;
 
     function animateSubmarineLap(timestamp) {
       if (submarineLastFrame !== null && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -226,7 +304,7 @@
             submarineBoostStartedAt = null;
           }
         }
-        submarineLapProgress = (submarineLapProgress + delta * speed / 60000) % 1;
+        submarineLapProgress = (submarineLapProgress + delta * speed / submarineLapDuration) % 1;
         deliverySubmarine.style.offsetDistance = `${submarineLapProgress * 100}%`;
       }
       submarineLastFrame = timestamp;
@@ -540,7 +618,7 @@
       void cartToast.offsetWidth;
       cartToast.classList.add("show");
       window.clearTimeout(cartToastTimer);
-      cartToastTimer = window.setTimeout(() => cartToast.classList.remove("show"), 1000);
+      cartToastTimer = window.setTimeout(() => cartToast.classList.remove("show"), 1500);
     }
 
     function changeCartItemQty(itemId, delta) {
